@@ -94,12 +94,18 @@ public class TokenProvider implements InitializingBean {
 
     //token에 담겨있는 정보를 이용하여 Authentication 객체를 리턴
     public Authentication getAuthentication(String token) {
-        Claims claims = Jwts
-                .parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        Claims claims;
+
+        try {
+            claims = Jwts
+                    .parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        }catch (ExpiredJwtException e){
+            claims = e.getClaims();
+        }
 
         //Claim 객체에서 권한 정보를 빼냄
         Collection<? extends GrantedAuthority> authorities =
