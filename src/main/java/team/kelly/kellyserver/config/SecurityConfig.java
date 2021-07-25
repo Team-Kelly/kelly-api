@@ -56,6 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/category/**").permitAll() //카테고리는 인증 없이 접근 허용
                 .antMatchers("/api/authenticate").permitAll()
                 .antMatchers("/api/signup").permitAll()
+                .antMatchers("/api/reissue").permitAll()
                 .anyRequest().authenticated()
 
                 .and()
