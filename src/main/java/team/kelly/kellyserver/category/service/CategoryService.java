@@ -19,7 +19,7 @@ public class CategoryService {
 
     //프로젝트 기준 경로 파일 이름 반환 (수정 필요)
     public String getCategoryFilename(String user, String category){
-        return "src/main/java/team/kelly/kellyserver/category/pyresource/"+user+"/"+category+".py";
+        return "/home/ubuntu/kelly-api/src/main/java/team/kelly/kellyserver/category/pyresource/"+user+"/"+category+".py";
     }
 
     //파이썬 args 넘기기 전 Str형 전처리
