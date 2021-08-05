@@ -17,6 +17,6 @@ public class CategoryController {
 
     @PostMapping(path = "/{user}/{category}")
     public ResponseEntity<String> getCategoryInfo(@PathVariable String user, @PathVariable String category, @RequestBody CategorySearchInfoDto infoVO){
-        return ResponseEntity.ok(categoryService.getCategoryInfo(user, category, infoVO));
+        return ResponseEntity.ok(categoryService.getCategoryResult(user, category, infoVO));
     }
 }

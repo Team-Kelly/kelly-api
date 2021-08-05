@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class CategoryService {
 
-    public String getCategoryInfo(String user, String category, CategorySearchInfoDto infoVO) {
+    public String getCategoryResult(String user, String category, CategorySearchInfoDto infoVO) {
         return getInformationFromPython(user, category, infoVO.getArgs());
     }
 
@@ -48,7 +48,7 @@ public class CategoryService {
 
         } catch (JepException e) {
             e.printStackTrace();
-            return "error";
+            return "Python File Internal Error";
         }
     }
 }
