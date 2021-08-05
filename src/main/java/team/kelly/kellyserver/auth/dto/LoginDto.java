@@ -1,5 +1,6 @@
 package team.kelly.kellyserver.auth.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
@@ -14,9 +15,11 @@ public class LoginDto {
 
     @NotNull
     @Size(min = 3, max = 50)
+    @ApiModelProperty(example = "testid")
     private String username;
 
     @NotNull
     @Size(min = 3, max = 100)
+    @ApiModelProperty(example = "testpwd")
     private String password;
 }
