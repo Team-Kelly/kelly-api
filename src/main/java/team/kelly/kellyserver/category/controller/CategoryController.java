@@ -10,7 +10,7 @@ import team.kelly.kellyserver.category.service.CategoryService;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/category")
+@RequestMapping(value = "/api/category", produces = "application/text; charset=utf8")
 @RequiredArgsConstructor
 public class CategoryController {
 

@@ -11,7 +11,7 @@ import team.kelly.kellyserver.auth.service.UserService;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(value = "/api", produces = "application/text; charset=utf8")
 public class UserController {
     private final UserService userService;
 

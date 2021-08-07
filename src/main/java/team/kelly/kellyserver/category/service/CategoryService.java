@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import team.kelly.kellyserver.category.dto.CategorySearchInfoDto;
 
+import java.net.URLDecoder;
 import java.util.List;
 
 @Slf4j
@@ -19,7 +20,7 @@ public class CategoryService {
 
     //프로젝트 기준 경로 파일 이름 반환 (수정 필요)
     public String getCategoryFilename(String user, String category){
-        return "/home/ubuntu/kelly-api/src/main/java/team/kelly/kellyserver/category/pyresource/"+user+"/"+category+".py";
+        return "src/main/java/team/kelly/kellyserver/category/pyresource/"+user+"/"+category+".py";
     }
 
     //파이썬 args 넘기기 전 Str형 전처리
@@ -48,7 +49,7 @@ public class CategoryService {
 
         } catch (JepException e) {
             e.printStackTrace();
-            return "error";
+            return "Python Internal Error";
         }
     }
 }

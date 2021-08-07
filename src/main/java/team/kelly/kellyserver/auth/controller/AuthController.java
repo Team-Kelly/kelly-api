@@ -30,7 +30,7 @@ import java.sql.Ref;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api")
+@RequestMapping(value = "/api", produces = "application/text; charset=utf8")
 public class AuthController {
 
     private final AuthService authService;
