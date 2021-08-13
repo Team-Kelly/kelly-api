@@ -4,8 +4,11 @@ import jep.Interpreter;
 import jep.JepException;
 import jep.SharedInterpreter;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import team.kelly.kellyserver.category.dto.CategorySearchInfoDto;
+import team.kelly.kellyserver.common.ApiUtility;
 
 import java.net.URLDecoder;
 import java.util.List;
@@ -14,7 +17,47 @@ import java.util.List;
 @Service
 public class CategoryService {
 
-    public String getCategoryInfo(String user, String category, CategorySearchInfoDto infoVO) {
+    static final String busUrl = "https://bus.go.kr/xmlRequest/getStationByUid.jsp?strBusNumber=";
+
+    public String getBusArriveData(CategorySearchInfoDto infoVO){
+        try{
+            String jsonStr = ApiUtility.callApi(busUrl + infoVO.getArgs().get(0));
+            JSONObject jsonObject = new JSONObject(jsonStr);
+            jsonObject = jsonObject.getJSONObject("Msg");
+
+            log.info(String.valueOf(jsonStr));
+
+            JSONArray jsonArray = new JSONArray();
+            if (jsonObject.get("stationList") instanceof JSONArray){
+                jsonArray = jsonObject.getJSONArray("stationList");
+            }else{
+                jsonArray.put(jsonObject.getJSONObject("stationList"));
+            }
+
+            String result = "";
+
+            for (int i = 0; i< jsonArray.length(); i++){
+                JSONObject obj = jsonArray.getJSONObject(i);
+                log.info(String.valueOf(obj));
+
+                String rtNm = obj.get("rtNm").toString();
+
+                if (rtNm.equals(infoVO.getArgs().get(1))){
+                    result += "{ \"arrmsg1\" : \"" + obj.getString("arrmsg1") + "\", " +
+                            "\"arrmsg2\" : \"" + obj.getString("arrmsg2") + "\" }";
+                    return result;
+                }
+            }
+
+            return "no such rtNm";
+
+        }catch (Exception e){
+            log.error(e.getMessage() + e.getStackTrace());
+            return "api call error";
+        }
+    }
+
+    public String getCategoryResult(String user, String category, CategorySearchInfoDto infoVO) {
         return getInformationFromPython(user, category, infoVO.getArgs());
     }
 
@@ -49,7 +92,7 @@ public class CategoryService {
 
         } catch (JepException e) {
             e.printStackTrace();
-            return "Python Internal Error";
+            return "Python File Internal Error";
         }
     }
 }
