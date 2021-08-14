@@ -1,42 +1,46 @@
 package team.kelly.kellyserver.category.service;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
-import org.junit.runner.RunWith;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import team.kelly.kellyserver.category.dto.BusSearchInfoDto;
+import team.kelly.kellyserver.category.dto.SubwaySearchInfoDto;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
-public class CategoryServiceTest {
+@Slf4j
+@ExtendWith(MockitoExtension.class)
+class CategoryServiceTest {
 
     @InjectMocks
     CategoryService categoryService;
 
     @Test
-    public void preArgsToStr_원소가_여러개일때_잘_작동되는지(){
+    void getBusArriveData_잘_작동되는지() {
 
-        List<String> given = new ArrayList<>(Arrays.asList("aaa", "bbb", "ccc"));
+        BusSearchInfoDto given = new BusSearchInfoDto();
+        given.setBusNumber("261");
+        given.setStationNumber("11457");
+        String actual = categoryService.getBusArriveData(given);
 
-        String actual = categoryService.preArgsToStr(given);
-
-        Assertions.assertEquals(actual, "['aaa', 'bbb', 'ccc', ]");
-
+        log.info(actual);
+        assertThat(actual).isNotNull();
     }
 
     @Test
-    public void preArgsToStr_원소가_한개일때_잘_작동되는지(){
+    void getSubwayArriveData_잘_작동되는지() {
 
-        List<String> given = new ArrayList<>(Arrays.asList("aaa"));
+        SubwaySearchInfoDto given = new SubwaySearchInfoDto();
+        given.setSubwayId("1004");
+        given.setStatnNm("서울");
+        given.setUpdnLine("하행");
+        given.setStatnId("1004000426");
+        String actual = categoryService.getSubwayArriveData(given);
 
-        String actual = categoryService.preArgsToStr(given);
-
-        Assertions.assertEquals(actual, "['aaa', ]");
+        log.info(actual);
+        assertThat(actual).isNotNull();
 
     }
 }
