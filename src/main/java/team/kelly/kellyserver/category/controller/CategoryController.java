@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import team.kelly.kellyserver.category.dto.BusSearchInfoDto;
 import team.kelly.kellyserver.category.dto.CategorySearchInfoDto;
 import team.kelly.kellyserver.category.dto.SubwaySearchInfoDto;
+import team.kelly.kellyserver.category.dto.WeatherSearchInfoDto;
 import team.kelly.kellyserver.category.service.CategoryService;
 
 @Slf4j
@@ -34,6 +35,12 @@ public class CategoryController {
     @ApiOperation(value = "지하철 도착 정보 api 호출", notes = "실시간 지하철 도착까지 남은 시간을 받아온다.")
     public ResponseEntity<String> getSubwayInfo(@RequestBody SubwaySearchInfoDto infoVO) {
         return ResponseEntity.ok(categoryService.getSubwayArriveData(infoVO));
+    }
+
+    @PostMapping(path = "/weather/current")
+    @ApiOperation(value = "현재 날씨 정보 api 호출", notes = "현재 날씨의 기온, 습도, 하늘상태, 강수형태를 받아온다.")
+    public ResponseEntity<String> getWeatherInfo(@RequestBody WeatherSearchInfoDto infoVO) {
+        return ResponseEntity.ok(categoryService.getCurrentWeatherData(infoVO));
     }
 //
 //    @PostMapping(path = "/stock")

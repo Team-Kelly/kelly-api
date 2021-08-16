@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import team.kelly.kellyserver.category.dto.BusSearchInfoDto;
 import team.kelly.kellyserver.category.dto.SubwaySearchInfoDto;
+import team.kelly.kellyserver.category.dto.WeatherSearchInfoDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,6 +39,19 @@ class CategoryServiceTest {
         given.setUpdnLine("하행");
         given.setStatnId("1004000426");
         String actual = categoryService.getSubwayArriveData(given);
+
+        log.info(actual);
+        assertThat(actual).isNotNull();
+
+    }
+
+    @Test
+    void getCurrentWeatherData_잘_작동되는지() {
+
+        WeatherSearchInfoDto given = new WeatherSearchInfoDto();
+        given.setNx("65");
+        given.setNx("129");
+        String actual = categoryService.getCurrentWeatherData(given);
 
         log.info(actual);
         assertThat(actual).isNotNull();

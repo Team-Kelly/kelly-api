@@ -10,9 +10,9 @@ public class SubwaySearchInfoDto {
     private String statnNm;
     @ApiModelProperty(example = "하행")
     private String updnLine;
-    @ApiModelProperty(example = "1001")
+    @ApiModelProperty(example = "\"1001\"")
     private String subwayId;
-    @ApiModelProperty(example = "1004000426")
+    @ApiModelProperty(example = "\"1004000426\"")
     private String statnId;
 
 

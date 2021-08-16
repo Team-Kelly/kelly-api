@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 public class BusSearchInfoDto {
-    @ApiModelProperty(example = "261")
+    @ApiModelProperty(example = "\"261\"")
     private String busNumber;
-    @ApiModelProperty(example = "11457")
+    @ApiModelProperty(example = "\"11457\"")
     private String stationNumber;
 }

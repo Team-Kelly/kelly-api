@@ -11,9 +11,16 @@ import org.springframework.stereotype.Service;
 import team.kelly.kellyserver.category.dto.BusSearchInfoDto;
 import team.kelly.kellyserver.category.dto.CategorySearchInfoDto;
 import team.kelly.kellyserver.category.dto.SubwaySearchInfoDto;
+import team.kelly.kellyserver.category.dto.WeatherSearchInfoDto;
 import team.kelly.kellyserver.common.ApiUtility;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+
+import static team.kelly.kellyserver.common.CustomJSONUtility.sortJsonArray;
 
 @Slf4j
 @Service
@@ -21,9 +28,15 @@ public class CategoryService {
 
     @Value("${apikey.seouloepnapi}")
     String seoulOpenApiKey;
+    @Value("${apikey.govoepnapi}")
+    String govOpenApiKey;
     static final String busUrl = "https://bus.go.kr/xmlRequest/getStationByUid.jsp?strBusNumber=";
     static final String subwayUrlPrefix = "http://swopenapi.seoul.go.kr/api/subway/";
     static final String subwayUrlSuffix = "/xml/realtimeStationArrival/0/1000/";
+    static final String weatherGetInfoUrlPrefix = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtFcst?serviceKey=";
+
+    static String[] SKY_STATUS = {"없음", "맑음", "없음", "구름많음", "흐림"};
+    static String[] PTY_STATUS = {"없음", "비", "비/눈", "눈", "소나기"};
 
     public String getBusArriveData(BusSearchInfoDto infoVO) {
         try {
@@ -44,7 +57,6 @@ public class CategoryService {
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
-                log.info(String.valueOf(obj));
 
                 String rtNm = obj.get("rtNm").toString();
 
@@ -69,8 +81,6 @@ public class CategoryService {
             JSONObject jsonObject = new JSONObject(jsonStr);
             jsonObject = jsonObject.getJSONObject("realtimeStationArrival");
 
-            log.info(String.valueOf(jsonStr));
-
             JSONArray jsonArray = new JSONArray();
             if (jsonObject.get("row") instanceof JSONArray) {
                 jsonArray = jsonObject.getJSONArray("row");
@@ -82,7 +92,6 @@ public class CategoryService {
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
-                log.info(String.valueOf(obj));
 
                 String subwayId = obj.get("subwayId").toString();
                 String statnId = obj.get("statnId").toString();
@@ -91,12 +100,65 @@ public class CategoryService {
                 if (subwayId.equals(infoVO.getSubwayId()) && statnId.equals(infoVO.getStatnId()) && updnLine.equals(infoVO.getUpdnLine())) {
                     result += "{ \"arvlMsg1\" : \"" + obj.getString("arvlMsg2") + "\", " +
                             "\"arvlMsg2\" : \"" + obj.getString("arvlMsg3") + "\" }";
-                    log.info(result);
                     return result;
                 }
             }
 
             return "no such subwayId or stationId";
+
+        } catch (Exception e) {
+            log.error(e.getMessage() + e.getStackTrace());
+            return "api call error";
+        }
+    }
+
+    public String getCurrentWeatherData(WeatherSearchInfoDto infoVO) {
+        try {
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            if (cal.get(Calendar.MINUTE) <= 30) {
+                cal.add(Calendar.HOUR, -1);
+            }
+
+            DateFormat df = new SimpleDateFormat("yyyyMMddHHMM");
+
+
+            String lastVersion = df.format(cal.getTime());
+            String base_date = lastVersion.substring(0, lastVersion.length() - 4);
+            String base_time = lastVersion.substring(lastVersion.length() - 4, lastVersion.length() - 2) + "30";
+
+
+            String jsonStr = ApiUtility.callApi(weatherGetInfoUrlPrefix + govOpenApiKey + "&pageNo=1&numOfRows=100&dataType=XML&base_date="
+                    + base_date + "&base_time=" + base_time + "&nx=" + infoVO.getNx() + "&ny=" + infoVO.getNy());
+
+            JSONObject jsonObject = new JSONObject(jsonStr);
+
+            JSONArray jsonArray = jsonObject.getJSONObject("response").getJSONObject("body").
+                    getJSONObject("items").getJSONArray("item");
+            jsonArray = sortJsonArray(jsonArray);
+
+
+            String result = "{";
+
+            for (int i = 0; i < 10; i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+
+                if (obj.getString("category").equals("T1H"))
+                    result += "\"기온\" : \"" + obj.getInt("fcstValue") + "\" ,";
+                else if (obj.getString("category").equals("REH"))
+                    result += "\"습도\" : \"" + obj.getInt("fcstValue") + "%\" ,";
+                else if (obj.getString("category").equals("SKY"))
+                    result += "\"하늘상태\" : \"" + SKY_STATUS[obj.getInt("fcstValue")] + "\" ,";
+                else if (obj.getString("category").equals("PTY"))
+                    result += "\"강수형태\" : \"" + PTY_STATUS[obj.getInt("fcstValue")] + "\" ,";
+
+            }
+
+            result = result.substring(0, result.length() - 2);
+            result += "}";
+
+            return result;
 
         } catch (Exception e) {
             log.error(e.getMessage() + e.getStackTrace());
