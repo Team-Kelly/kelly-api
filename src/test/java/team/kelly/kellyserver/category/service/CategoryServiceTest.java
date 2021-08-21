@@ -37,7 +37,6 @@ class CategoryServiceTest {
         given.setSubwayId("1004");
         given.setStatnNm("서울");
         given.setUpdnLine("하행");
-        given.setStatnId("1004000426");
         String actual = categoryService.getSubwayArriveData(given);
 
         log.info(actual);

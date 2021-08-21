@@ -8,12 +8,10 @@ public class SubwaySearchInfoDto {
 
     @ApiModelProperty(example = "서울")
     private String statnNm;
-    @ApiModelProperty(example = "하행")
+    @ApiModelProperty(example = "상행")
     private String updnLine;
     @ApiModelProperty(example = "\"1001\"")
     private String subwayId;
-    @ApiModelProperty(example = "\"1004000426\"")
-    private String statnId;
 
 
 }

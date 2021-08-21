@@ -18,8 +18,8 @@ public class CustomJSONUtility {
         Collections.sort(jsons, new Comparator<JSONObject>() {
             @Override
             public int compare(JSONObject lhs, JSONObject rhs) {
-                String lid = lhs.getString("fcstTime");
-                String rid = rhs.getString("fcstTime");
+                String lid = lhs.get("fcstTime").toString();
+                String rid = rhs.get("fcstTime").toString();
                 return lid.compareTo(rid);
             }
         });

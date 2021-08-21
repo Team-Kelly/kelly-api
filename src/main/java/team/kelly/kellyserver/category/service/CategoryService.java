@@ -14,6 +14,7 @@ import team.kelly.kellyserver.category.dto.SubwaySearchInfoDto;
 import team.kelly.kellyserver.category.dto.WeatherSearchInfoDto;
 import team.kelly.kellyserver.common.ApiUtility;
 
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -77,7 +78,7 @@ public class CategoryService {
 
     public String getSubwayArriveData(SubwaySearchInfoDto infoVO) {
         try {
-            String jsonStr = ApiUtility.callApi(subwayUrlPrefix + seoulOpenApiKey + subwayUrlSuffix + infoVO.getStatnNm());
+            String jsonStr = ApiUtility.callApi(subwayUrlPrefix + seoulOpenApiKey + subwayUrlSuffix + URLEncoder.encode(infoVO.getStatnNm(), "UTF-8"));
             JSONObject jsonObject = new JSONObject(jsonStr);
             jsonObject = jsonObject.getJSONObject("realtimeStationArrival");
 
@@ -89,20 +90,27 @@ public class CategoryService {
             }
 
             String result = "";
+            int total = 0;
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
 
                 String subwayId = obj.get("subwayId").toString();
-                String statnId = obj.get("statnId").toString();
                 String updnLine = obj.get("updnLine").toString();
 
-                if (subwayId.equals(infoVO.getSubwayId()) && statnId.equals(infoVO.getStatnId()) && updnLine.equals(infoVO.getUpdnLine())) {
-                    result += "{ \"arvlMsg1\" : \"" + obj.getString("arvlMsg2") + "\", " +
-                            "\"arvlMsg2\" : \"" + obj.getString("arvlMsg3") + "\" }";
-                    return result;
+                if (subwayId.equals(infoVO.getSubwayId()) && updnLine.equals(infoVO.getUpdnLine()) && total < 2) {
+                    if (total == 0)
+                        result += "{ \"arvlMsg1\" : \"" + obj.getString("arvlMsg2") + "\", ";
+                    if (total == 1)
+                        result += "\"arvlMsg2\" : \"" + obj.getString("arvlMsg2") + "\" }";
+                    total++;
                 }
             }
+
+            if (total == 1)
+                return result + "}";
+            if (total == 2)
+                return result;
 
             return "no such subwayId or stationId";
 
