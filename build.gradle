@@ -1,55 +1,61 @@
 plugins {
-	id 'org.springframework.boot' version '2.5.2'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.5.2'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
 }
 
 group = 'team.kelly'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
-bootJar{
-	archivesBaseName = 'kelly'
-	archiveFileName = 'kelly.jar'
-	archiveVersion = "0.0.1"
+bootJar {
+    archivesBaseName = 'kelly'
+    archiveFileName = 'kelly.jar'
+    archiveVersion = "0.0.1"
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'io.springfox:springfox-spring-web:2.9.2'
-	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.36'
-	implementation 'org.apache.tomcat.embed:tomcat-embed-core:9.0.36'
-	implementation 'io.springfox:springfox-schema:2.9.2'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'junit:junit:4.12'
+    implementation 'io.springfox:springfox-spring-web:2.9.2'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.36'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core:9.0.36'
+    implementation 'io.springfox:springfox-schema:2.9.2'
     implementation 'org.apache.maven:maven-plugin-api:3.3.9'
-	implementation 'io.springfox:springfox-swagger2:2.9.2'
-	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+    implementation 'io.springfox:springfox-swagger2:2.9.2'
+    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+    implementation 'org.json:json:20210307'
 
 
     implementation files('libs/jep-3.9.1.jar')
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'mysql:mysql-connector-java'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
+    implementation 'org.projectlombok:lombok:1.18.16'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'mysql:mysql-connector-java'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.mockito:mockito-core:3.3.3'
+    testCompileOnly 'org.projectlombok:lombok:1.18.16'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
 
-	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
-	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2', 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2', 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
