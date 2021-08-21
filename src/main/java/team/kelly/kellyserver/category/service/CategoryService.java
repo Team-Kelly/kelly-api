@@ -37,7 +37,7 @@ public class CategoryService {
     static final String weatherGetInfoUrlPrefix = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtFcst?serviceKey=";
 
     static String[] SKY_STATUS = {"없음", "맑음", "없음", "구름많음", "흐림"};
-    static String[] PTY_STATUS = {"없음", "비", "비/눈", "눈", "소나기"};
+    static String[] PTY_STATUS = {"없음", "비", "비/눈", "눈", "소나기", "빗방울", "빗방울눈날림", "눈날림"};
 
     public String getBusArriveData(BusSearchInfoDto infoVO) {
         try {
