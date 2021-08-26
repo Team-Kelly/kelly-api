@@ -26,4 +26,14 @@ public class CustomJSONUtility {
         return new JSONArray(jsons);
     }
 
+    public static JSONArray getCustomJSONArray(String tag, JSONObject jsonObject) {
+        JSONArray jsonArray = new JSONArray();
+        if (jsonObject.get(tag) instanceof JSONArray) {
+            jsonArray = jsonObject.getJSONArray(tag);
+        } else {
+            jsonArray.put(jsonObject.getJSONObject(tag));
+        }
+        return jsonArray;
+    }
+
 }

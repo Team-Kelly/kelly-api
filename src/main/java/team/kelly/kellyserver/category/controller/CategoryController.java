@@ -4,9 +4,11 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import team.kelly.kellyserver.category.dto.BusSearchInfoDto;
-import team.kelly.kellyserver.category.dto.CategorySearchInfoDto;
 import team.kelly.kellyserver.category.dto.SubwaySearchInfoDto;
 import team.kelly.kellyserver.category.dto.WeatherSearchInfoDto;
 import team.kelly.kellyserver.category.service.CategoryService;
@@ -19,11 +21,11 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @PostMapping(path = "/{user}/{category}")
-    @ApiOperation(value = "커스텀 카테고리 api 호출", notes = "커스텀하게 만들어진 카테고리 api를 통해 데이터를 받아온다.")
-    public ResponseEntity<String> getCategoryInfo(@PathVariable String user, @PathVariable String category, @RequestBody CategorySearchInfoDto infoVO) {
-        return ResponseEntity.ok(categoryService.getCategoryResult(user, category, infoVO));
-    }
+//    @PostMapping(path = "/{user}/{category}")
+//    @ApiOperation(value = "커스텀 카테고리 api 호출", notes = "커스텀하게 만들어진 카테고리 api를 통해 데이터를 받아온다.")
+//    public ResponseEntity<String> getCategoryInfo(@PathVariable String user, @PathVariable String category, @RequestBody CategorySearchInfoDto infoVO) {
+//        return ResponseEntity.ok(categoryService.getCategoryResult(user, category, infoVO));
+//    }
 
     @PostMapping(path = "/busarrive")
     @ApiOperation(value = "버스 도착 정보 api 호출", notes = "실시간 버스 도착까지 남은 시간을 받아온다.")

@@ -1,25 +1,21 @@
 package team.kelly.kellyserver.category.service;
 
-import jep.Interpreter;
-import jep.JepException;
-import jep.SharedInterpreter;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import team.kelly.kellyserver.category.dto.BusSearchInfoDto;
-import team.kelly.kellyserver.category.dto.CategorySearchInfoDto;
 import team.kelly.kellyserver.category.dto.SubwaySearchInfoDto;
 import team.kelly.kellyserver.category.dto.WeatherSearchInfoDto;
 import team.kelly.kellyserver.common.ApiUtility;
+import team.kelly.kellyserver.common.CustomJSONUtility;
 
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import static team.kelly.kellyserver.common.CustomJSONUtility.sortJsonArray;
 
@@ -31,28 +27,24 @@ public class CategoryService {
     String seoulOpenApiKey;
     @Value("${apikey.govoepnapi}")
     String govOpenApiKey;
-    static final String busUrl = "https://bus.go.kr/xmlRequest/getStationByUid.jsp?strBusNumber=";
+    static final String busUrlPrefix = "http://ws.bus.go.kr/api/rest/stationinfo/getStationByUid?serviceKey=";
+    static final String busUrlSuffix = "&arsId=";
     static final String subwayUrlPrefix = "http://swopenapi.seoul.go.kr/api/subway/";
     static final String subwayUrlSuffix = "/xml/realtimeStationArrival/0/1000/";
-    static final String weatherGetInfoUrlPrefix = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtFcst?serviceKey=";
+    static final String weatherUrlPrefix = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtFcst?serviceKey=";
 
     static String[] SKY_STATUS = {"없음", "맑음", "없음", "구름많음", "흐림"};
     static String[] PTY_STATUS = {"없음", "비", "비/눈", "눈", "소나기", "빗방울", "빗방울눈날림", "눈날림"};
 
     public String getBusArriveData(BusSearchInfoDto infoVO) {
         try {
-            String jsonStr = ApiUtility.callApi(busUrl + infoVO.getStationNumber());
+            String jsonStr = ApiUtility.callApi(busUrlPrefix + govOpenApiKey + busUrlSuffix + infoVO.getStationNumber());
             JSONObject jsonObject = new JSONObject(jsonStr);
-            jsonObject = jsonObject.getJSONObject("Msg");
+            jsonObject = jsonObject.getJSONObject("ServiceResult").getJSONObject("msgBody");
 
             log.info(String.valueOf(jsonStr));
 
-            JSONArray jsonArray = new JSONArray();
-            if (jsonObject.get("stationList") instanceof JSONArray) {
-                jsonArray = jsonObject.getJSONArray("stationList");
-            } else {
-                jsonArray.put(jsonObject.getJSONObject("stationList"));
-            }
+            JSONArray jsonArray = CustomJSONUtility.getCustomJSONArray("itemList", jsonObject);
 
             String result = "";
 
@@ -82,12 +74,7 @@ public class CategoryService {
             JSONObject jsonObject = new JSONObject(jsonStr);
             jsonObject = jsonObject.getJSONObject("realtimeStationArrival");
 
-            JSONArray jsonArray = new JSONArray();
-            if (jsonObject.get("row") instanceof JSONArray) {
-                jsonArray = jsonObject.getJSONArray("row");
-            } else {
-                jsonArray.put(jsonObject.getJSONObject("row"));
-            }
+            JSONArray jsonArray = CustomJSONUtility.getCustomJSONArray("row", jsonObject);
 
             String result = "";
             int total = 0;
@@ -137,7 +124,7 @@ public class CategoryService {
             String base_time = lastVersion.substring(lastVersion.length() - 4, lastVersion.length() - 2) + "30";
 
 
-            String jsonStr = ApiUtility.callApi(weatherGetInfoUrlPrefix + govOpenApiKey + "&pageNo=1&numOfRows=100&dataType=XML&base_date="
+            String jsonStr = ApiUtility.callApi(weatherUrlPrefix + govOpenApiKey + "&pageNo=1&numOfRows=100&dataType=XML&base_date="
                     + base_date + "&base_time=" + base_time + "&nx=" + infoVO.getNx() + "&ny=" + infoVO.getNy());
 
             JSONObject jsonObject = new JSONObject(jsonStr);
@@ -173,43 +160,44 @@ public class CategoryService {
             return "api call error";
         }
     }
-
-    public String getCategoryResult(String user, String category, CategorySearchInfoDto infoVO) {
-        return getInformationFromPython(user, category, infoVO.getArgs());
-    }
-
-    //프로젝트 기준 경로 파일 이름 반환 (수정 필요)
-    public String getCategoryFilename(String user, String category) {
-        return "src/main/java/team/kelly/kellyserver/category/pyresource/" + user + "/" + category + ".py";
-    }
-
-    //파이썬 args 넘기기 전 Str형 전처리
-    public String preArgsToStr(List<String> args) {
-        String str = "[";
-        for (String item : args) {
-            str += "'" + item + "', "; //앞 뒤로 문자처리
-        }
-        str += "]";
-        return str;
-    }
-
-    //파이썬 파일에서 데이터 가져옴
-    public String getInformationFromPython(String user, String category, List<String> args) {
-
-        try (Interpreter interp = new SharedInterpreter()) {
-            interp.eval("args = " + preArgsToStr(args));
-
-            log.info(String.valueOf(preArgsToStr(args)));
-
-            interp.runScript(getCategoryFilename(user, category));
-            interp.eval("from java.lang import System");
-            Object output = interp.getValue("output");
-
-            return output.toString();
-
-        } catch (JepException e) {
-            e.printStackTrace();
-            return "Python File Internal Error";
-        }
-    }
+    
+//
+//    public String getCategoryResult(String user, String category, CategorySearchInfoDto infoVO) {
+//        return getInformationFromPython(user, category, infoVO.getArgs());
+//    }
+//
+//    //프로젝트 기준 경로 파일 이름 반환 (수정 필요)
+//    public String getCategoryFilename(String user, String category) {
+//        return "src/main/java/team/kelly/kellyserver/category/pyresource/" + user + "/" + category + ".py";
+//    }
+//
+//    //파이썬 args 넘기기 전 Str형 전처리
+//    public String preArgsToStr(List<String> args) {
+//        String str = "[";
+//        for (String item : args) {
+//            str += "'" + item + "', "; //앞 뒤로 문자처리
+//        }
+//        str += "]";
+//        return str;
+//    }
+//
+//    //파이썬 파일에서 데이터 가져옴
+//    public String getInformationFromPython(String user, String category, List<String> args) {
+//
+//        try (Interpreter interp = new SharedInterpreter()) {
+//            interp.eval("args = " + preArgsToStr(args));
+//
+//            log.info(String.valueOf(preArgsToStr(args)));
+//
+//            interp.runScript(getCategoryFilename(user, category));
+//            interp.eval("from java.lang import System");
+//            Object output = interp.getValue("output");
+//
+//            return output.toString();
+//
+//        } catch (JepException e) {
+//            e.printStackTrace();
+//            return "Python File Internal Error";
+//        }
+//    }
 }
