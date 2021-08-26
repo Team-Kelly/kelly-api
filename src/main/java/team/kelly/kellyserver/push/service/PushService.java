@@ -3,6 +3,7 @@ package team.kelly.kellyserver.push.service;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.Notification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,13 +14,12 @@ public class PushService {
         // This registration token comes from the client FCM SDKs.
         String registrationToken = appToken;
 
-        // See documentation on defining a message payload.
+        Notification notification = new Notification("title", "body");
         Message message = Message.builder()
-                .putData("title", "테스트 타이틀")
-                .putData("content", "테스트 콘텐츠입니다.")
+                .setNotification(notification)
                 .setToken(registrationToken)
                 .build();
-
+        
         // Send a message to the device corresponding to the provided
         // registration token.
         String response = FirebaseMessaging.getInstance().send(message);
