@@ -1,4 +1,4 @@
-package team.kelly.kellyserver.config;
+package team.kelly.kellyserver.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -8,10 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import team.kelly.kellyserver.jwt.JwtAccessDeniedHandler;
-import team.kelly.kellyserver.jwt.JwtAuthenticationEntryPoint;
-import team.kelly.kellyserver.jwt.JwtSecurityConfig;
-import team.kelly.kellyserver.jwt.TokenProvider;
+import team.kelly.kellyserver.common.TokenProvider;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) //prePostEnabled를 메소드 단위로 사용할 수 있도록

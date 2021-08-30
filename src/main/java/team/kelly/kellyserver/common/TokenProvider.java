@@ -1,4 +1,5 @@
-package team.kelly.kellyserver.jwt;
+package team.kelly.kellyserver.common;
+
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -103,7 +104,7 @@ public class TokenProvider implements InitializingBean {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-        }catch (ExpiredJwtException e){
+        } catch (ExpiredJwtException e) {
             claims = e.getClaims();
         }
 
