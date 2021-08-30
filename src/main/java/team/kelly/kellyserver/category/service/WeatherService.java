@@ -5,9 +5,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import team.kelly.kellyserver.category.dto.GridValueDto;
 import team.kelly.kellyserver.category.dto.WeatherResultInfoDto;
 import team.kelly.kellyserver.category.dto.WeatherSearchInfoDto;
 import team.kelly.kellyserver.common.ApiUtility;
+import team.kelly.kellyserver.common.TransLocalPoint;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -32,6 +34,8 @@ public class WeatherService {
     public WeatherResultInfoDto getCurrentWeatherData(WeatherSearchInfoDto infoVO) throws IOException {
 
         WeatherResultInfoDto result = new WeatherResultInfoDto();
+        GridValueDto gridValueDto = TransLocalPoint.getGridxy(infoVO.getLat(), infoVO.getLon());
+        log.info("grid value : " + gridValueDto.toString());
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
@@ -48,7 +52,7 @@ public class WeatherService {
 
 
         String jsonStr = ApiUtility.callApi(weatherGetInfoUrlPrefix + govOpenApiKey + "&pageNo=1&numOfRows=100&dataType=XML&base_date="
-                + base_date + "&base_time=" + base_time + "&nx=" + infoVO.getNx() + "&ny=" + infoVO.getNy());
+                + base_date + "&base_time=" + base_time + "&nx=" + gridValueDto.getGridx() + "&ny=" + gridValueDto.getGridy());
 
         JSONObject jsonObject = new JSONObject(jsonStr);
 
