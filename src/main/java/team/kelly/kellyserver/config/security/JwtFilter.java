@@ -1,4 +1,4 @@
-package team.kelly.kellyserver.jwt;
+package team.kelly.kellyserver.config.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
+import team.kelly.kellyserver.common.TokenProvider;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

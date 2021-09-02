@@ -1,21 +1,25 @@
 package team.kelly.kellyserver.category.service;
 
+import jep.Interpreter;
+import jep.JepException;
+import jep.SharedInterpreter;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import team.kelly.kellyserver.category.dto.BusSearchInfoDto;
+import team.kelly.kellyserver.category.dto.CategorySearchInfoDto;
 import team.kelly.kellyserver.category.dto.SubwaySearchInfoDto;
 import team.kelly.kellyserver.category.dto.WeatherSearchInfoDto;
 import team.kelly.kellyserver.common.ApiUtility;
-import team.kelly.kellyserver.common.CustomJSONUtility;
 
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static team.kelly.kellyserver.common.CustomJSONUtility.sortJsonArray;
 
@@ -160,7 +164,7 @@ public class CategoryService {
             return "api call error";
         }
     }
-    
+
 //
 //    public String getCategoryResult(String user, String category, CategorySearchInfoDto infoVO) {
 //        return getInformationFromPython(user, category, infoVO.getArgs());
