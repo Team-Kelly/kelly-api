@@ -1,21 +1,17 @@
 package team.kelly.kellyserver.auth.service;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import team.kelly.kellyserver.auth.dto.LoginDto;
 import team.kelly.kellyserver.auth.dto.TokenDto;
 import team.kelly.kellyserver.auth.dto.TokenRequestDto;
 import team.kelly.kellyserver.auth.entity.RefreshToken;
 import team.kelly.kellyserver.auth.repository.RefreshTokenRepository;
-import team.kelly.kellyserver.jwt.TokenProvider;
-
-import javax.validation.Valid;
+import team.kelly.kellyserver.common.TokenProvider;
 
 @Service
 public class AuthService {

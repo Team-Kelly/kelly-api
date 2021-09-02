@@ -1,4 +1,4 @@
-package team.kelly.kellyserver.jwt;
+package team.kelly.kellyserver.config.security;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
