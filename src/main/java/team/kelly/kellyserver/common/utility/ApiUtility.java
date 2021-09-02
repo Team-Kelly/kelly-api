@@ -1,4 +1,4 @@
-package team.kelly.kellyserver.common;
+package team.kelly.kellyserver.common.utility;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

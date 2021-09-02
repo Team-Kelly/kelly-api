@@ -1,4 +1,4 @@
-package team.kelly.kellyserver.common;
+package team.kelly.kellyserver.common.utility;
 
 import lombok.extern.slf4j.Slf4j;
 import team.kelly.kellyserver.category.dto.GridValueDto;

@@ -14,6 +14,7 @@ import team.kelly.kellyserver.category.service.SubwayService;
 import team.kelly.kellyserver.category.service.WeatherService;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 @Slf4j
 @RestController
@@ -34,7 +35,7 @@ public class CategoryController {
 
     @PostMapping(path = "/subwayarrive")
     @ApiOperation(value = "지하철 도착 정보 api 호출", notes = "실시간 지하철 도착까지 남은 시간을 받아온다.")
-    public SubwayResultInfoDto getSubwayInfo(@RequestBody SubwaySearchInfoDto infoVO) throws IOException {
+    public SubwayResultInfoDto getSubwayInfo(@RequestBody SubwaySearchInfoDto infoVO) throws IOException, ParseException {
         return subwayService.getSubwayArriveData(infoVO);
     }
 

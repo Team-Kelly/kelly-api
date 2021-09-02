@@ -11,7 +11,7 @@ import team.kelly.kellyserver.auth.dto.TokenDto;
 import team.kelly.kellyserver.auth.dto.TokenRequestDto;
 import team.kelly.kellyserver.auth.entity.RefreshToken;
 import team.kelly.kellyserver.auth.repository.RefreshTokenRepository;
-import team.kelly.kellyserver.common.TokenProvider;
+import team.kelly.kellyserver.common.security.TokenProvider;
 
 @Service
 public class AuthService {

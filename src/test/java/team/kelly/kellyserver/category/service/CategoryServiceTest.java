@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import team.kelly.kellyserver.category.dto.*;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,7 +38,7 @@ class CategoryServiceTest {
     }
 
     @Test
-    void getSubwayArriveData_잘_작동되는지() throws IOException {
+    void getSubwayArriveData_잘_작동되는지() throws IOException, ParseException {
 
         SubwaySearchInfoDto given = new SubwaySearchInfoDto();
         given.setSubwayId("1004");
@@ -54,8 +55,8 @@ class CategoryServiceTest {
     void getCurrentWeatherData_잘_작동되는지() throws IOException {
 
         WeatherSearchInfoDto given = new WeatherSearchInfoDto();
-        given.setNx("65");
-        given.setNx("129");
+        given.setLat(65);
+        given.setLon(129);
         WeatherResultInfoDto actual = weatherService.getCurrentWeatherData(given);
 
         log.info(actual.toString());

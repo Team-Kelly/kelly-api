@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import team.kelly.kellyserver.category.dto.BusResultInfoDto;
 import team.kelly.kellyserver.category.dto.BusSearchInfoDto;
-import team.kelly.kellyserver.common.ApiUtility;
+import team.kelly.kellyserver.common.utility.ApiUtility;
 
 import java.io.IOException;
 

@@ -13,7 +13,7 @@ import team.kelly.kellyserver.auth.dto.LoginDto;
 import team.kelly.kellyserver.auth.dto.TokenDto;
 import team.kelly.kellyserver.auth.dto.TokenRequestDto;
 import team.kelly.kellyserver.auth.service.AuthService;
-import team.kelly.kellyserver.common.TokenProvider;
+import team.kelly.kellyserver.common.security.TokenProvider;
 
 import javax.validation.Valid;
 

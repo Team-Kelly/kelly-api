@@ -7,10 +7,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import team.kelly.kellyserver.category.dto.SubwayResultInfoDto;
 import team.kelly.kellyserver.category.dto.SubwaySearchInfoDto;
-import team.kelly.kellyserver.common.ApiUtility;
+import team.kelly.kellyserver.common.utility.ApiUtility;
+import team.kelly.kellyserver.common.utility.ConvertUtility;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Slf4j
 @Service
@@ -21,7 +25,7 @@ public class SubwayService {
     static final String subwayUrlPrefix = "http://swopenapi.seoul.go.kr/api/subway/";
     static final String subwayUrlSuffix = "/xml/realtimeStationArrival/0/1000/";
 
-    public SubwayResultInfoDto getSubwayArriveData(SubwaySearchInfoDto infoVO) throws IOException {
+    public SubwayResultInfoDto getSubwayArriveData(SubwaySearchInfoDto infoVO) throws IOException, ParseException {
 
         SubwayResultInfoDto result = new SubwayResultInfoDto();
 
@@ -42,13 +46,42 @@ public class SubwayService {
             JSONObject obj = jsonArray.getJSONObject(i);
 
             String subwayId = obj.get("subwayId").toString();
+            String arvlMsg2 = obj.get("arvlMsg2").toString();
             String updnLine = obj.get("updnLine").toString();
+            String arvlCd = obj.get("arvlCd").toString();
+            String btrainSttus = "";
+            if (!obj.isNull("btrainSttus")) {
+                btrainSttus = obj.get("btrainSttus").toString();
+            }
+            String barvlDt = obj.get("barvlDt").toString(); //도착까지 남은 초
+            String recptnDtStr = obj.get("recptnDt").toString();
 
-            if (subwayId.equals(infoVO.getSubwayId()) && updnLine.equals(infoVO.getUpdnLine()) && total < 2) {
+
+            SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date recptnDtDate = transFormat.parse(recptnDtStr);
+            Date nowDate = new Date();
+
+
+            int arriveSec = Integer.parseInt(barvlDt);
+            int delaySec = (int) ((nowDate.getTime() - recptnDtDate.getTime()) / 1000);
+            int actualRemain = arriveSec - delaySec;
+
+            if (subwayId.equals(infoVO.getSubwayId()) && updnLine.equals(infoVO.getUpdnLine())
+                    && !arvlCd.equals("0") && !arvlCd.equals("1") && !arvlCd.equals("2")
+                    && !btrainSttus.equals("ITX") && !btrainSttus.equals("급행")
+                    && total < 2) {
                 if (total == 0)
-                    result.setArrmsg1(obj.getString("arvlMsg2"));
+                    if (actualRemain > 0) {
+                        result.setArrmsg1(ConvertUtility.ConvertSecToTime(actualRemain));
+                    } else {
+                        result.setArrmsg1(arvlMsg2);
+                    }
                 if (total == 1)
-                    result.setArrmsg2(obj.getString("arvlMsg2"));
+                    if (actualRemain > 0) {
+                        result.setArrmsg2(ConvertUtility.ConvertSecToTime(actualRemain));
+                    } else {
+                        result.setArrmsg2(arvlMsg2);
+                    }
                 total++;
             }
         }
@@ -56,10 +89,6 @@ public class SubwayService {
         log.info(result.toString());
 
         return result;
-
-//        } catch (Exception e) {
-//            log.error(e.getMessage() + e.getStackTrace());
-//        }
 
     }
 

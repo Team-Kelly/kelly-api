@@ -1,4 +1,4 @@
-package team.kelly.kellyserver.common;
+package team.kelly.kellyserver.common.utility;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

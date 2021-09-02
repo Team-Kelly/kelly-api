@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import team.kelly.kellyserver.category.dto.GridValueDto;
 import team.kelly.kellyserver.category.dto.WeatherResultInfoDto;
 import team.kelly.kellyserver.category.dto.WeatherSearchInfoDto;
-import team.kelly.kellyserver.common.ApiUtility;
-import team.kelly.kellyserver.common.TransLocalPoint;
+import team.kelly.kellyserver.common.utility.ApiUtility;
+import team.kelly.kellyserver.common.utility.TransLocalPoint;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import static team.kelly.kellyserver.common.CustomJSONUtility.sortJsonArray;
+import static team.kelly.kellyserver.common.utility.CustomJSONUtility.sortJsonArray;
 
 @Slf4j
 @Service

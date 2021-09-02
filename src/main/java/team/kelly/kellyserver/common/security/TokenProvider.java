@@ -1,4 +1,4 @@
-package team.kelly.kellyserver.common;
+package team.kelly.kellyserver.common.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
