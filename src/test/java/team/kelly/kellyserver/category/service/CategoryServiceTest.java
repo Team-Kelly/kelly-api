@@ -73,4 +73,17 @@ class CategoryServiceTest {
         assertThat(actual).isNotNull();
 
     }
+
+    @Test
+    void getVilageFcstWeatherData_잘_작동되는지() throws IOException {
+
+        GridValueDto given = new GridValueDto();
+        given.setGridx(61);
+        given.setGridy(125);
+        WeatherCurDto actual = weatherService.getVilageFcstWeatherData(given);
+
+        log.info(actual.toString());
+        assertThat(actual).isNotNull();
+
+    }
 }
