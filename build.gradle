@@ -39,8 +39,6 @@ dependencies {
     implementation 'io.springfox:springfox-swagger-ui:2.9.2'
     implementation 'org.json:json:20210307'
 
-
-    implementation files('libs/jep-3.9.1.jar')
     implementation 'org.projectlombok:lombok:1.18.16'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'mysql:mysql-connector-java'

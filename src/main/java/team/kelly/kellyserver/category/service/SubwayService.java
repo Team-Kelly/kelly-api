@@ -5,8 +5,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import team.kelly.kellyserver.category.dto.SubwayResultInfoDto;
-import team.kelly.kellyserver.category.dto.SubwaySearchInfoDto;
+import team.kelly.kellyserver.category.dto.SubwayResultDto;
+import team.kelly.kellyserver.category.dto.SubwaySearchDto;
 import team.kelly.kellyserver.common.utility.ApiUtility;
 import team.kelly.kellyserver.common.utility.ConvertUtility;
 
@@ -25,9 +25,9 @@ public class SubwayService {
     static final String subwayUrlPrefix = "http://swopenapi.seoul.go.kr/api/subway/";
     static final String subwayUrlSuffix = "/xml/realtimeStationArrival/0/1000/";
 
-    public SubwayResultInfoDto getSubwayArriveData(SubwaySearchInfoDto infoVO) throws IOException, ParseException {
+    public SubwayResultDto getSubwayArriveData(SubwaySearchDto infoVO) throws IOException, ParseException {
 
-        SubwayResultInfoDto result = new SubwayResultInfoDto();
+        SubwayResultDto result = new SubwayResultDto();
 
         String jsonStr = ApiUtility.callApi(subwayUrlPrefix + seoulOpenApiKey + subwayUrlSuffix + URLEncoder.encode(infoVO.getStatnNm(), "UTF-8"));
         JSONObject jsonObject = new JSONObject(jsonStr);

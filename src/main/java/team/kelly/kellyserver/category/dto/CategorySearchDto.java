@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class CategorySearchInfoDto {
+public class CategorySearchDto {
 
     @ApiModelProperty(example = "1")
     private int argc;

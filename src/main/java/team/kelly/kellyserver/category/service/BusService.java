@@ -5,8 +5,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import team.kelly.kellyserver.category.dto.BusResultInfoDto;
-import team.kelly.kellyserver.category.dto.BusSearchInfoDto;
+import team.kelly.kellyserver.category.dto.BusResultDto;
+import team.kelly.kellyserver.category.dto.BusSearchDto;
 import team.kelly.kellyserver.common.utility.ApiUtility;
 
 import java.io.IOException;
@@ -19,9 +19,9 @@ public class BusService {
     String govOpenApiKey;
     static final String busUrl = "https://bus.go.kr/xmlRequest/getStationByUid.jsp?strBusNumber=";
 
-    public BusResultInfoDto getBusArriveData(BusSearchInfoDto infoVO) throws IOException {
+    public BusResultDto getBusArriveData(BusSearchDto infoVO) throws IOException {
 
-        BusResultInfoDto result = new BusResultInfoDto();
+        BusResultDto result = new BusResultDto();
 
         String jsonStr = ApiUtility.callApi(busUrl + infoVO.getStationNumber());
         JSONObject jsonObject = new JSONObject(jsonStr);

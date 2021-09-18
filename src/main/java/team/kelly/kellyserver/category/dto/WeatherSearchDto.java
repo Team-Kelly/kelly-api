@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class WeatherSearchInfoDto {
+public class WeatherSearchDto {
     @ApiModelProperty(example = "37.6576769")
     double lat;
     @ApiModelProperty(example = "127.3007637")

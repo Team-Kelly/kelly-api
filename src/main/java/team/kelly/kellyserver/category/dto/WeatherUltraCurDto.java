@@ -7,9 +7,9 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class WeatherResultInfoDto {
-    String rain;
-    String sky;
-    String temp;
-    String humi;
+@ToString
+public class WeatherUltraCurDto {
+    int rainStatus;
+    int skyStatus;
+    int curTemp;
 }

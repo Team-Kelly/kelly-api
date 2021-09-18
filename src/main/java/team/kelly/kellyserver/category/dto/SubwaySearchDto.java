@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class SubwaySearchInfoDto {
+public class SubwaySearchDto {
 
     @ApiModelProperty(example = "서울")
     private String statnNm;

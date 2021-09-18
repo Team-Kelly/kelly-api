@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BusResultInfoDto {
+public class BusResultDto {
     String arrmsg1;
     String arrmsg2;
 }

@@ -7,7 +7,8 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SubwayResultInfoDto {
-    String arrmsg1;
-    String arrmsg2;
+public class WeatherCurDto {
+    int minTemp;
+    int maxTemp;
+    int rainProb;
 }
