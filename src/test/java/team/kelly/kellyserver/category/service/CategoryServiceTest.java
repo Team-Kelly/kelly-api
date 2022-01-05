@@ -51,10 +51,10 @@ class CategoryServiceTest {
     @Test
     void getCurrentWeatherData_잘_작동되는지() throws IOException {
 
-        WeatherSearchDto given = new WeatherSearchDto();
+        WeatherGeoSearchDto given = new WeatherGeoSearchDto();
         given.setLat(37.5132612);
         given.setLon(127.0979449);
-        WeatherResultDto actual = weatherService.getCurrentWeatherData(given);
+        WeatherCurResultDto actual = weatherService.getCurrentWeatherData(given);
 
         log.info(actual.toString());
         assertThat(actual).isNotNull();
@@ -81,6 +81,43 @@ class CategoryServiceTest {
         given.setGridx(61);
         given.setGridy(125);
         WeatherCurDto actual = weatherService.getVilageFcstWeatherData(given);
+
+        log.info(actual.toString());
+        assertThat(actual).isNotNull();
+
+    }
+
+    @Test
+    void getWeekWeatherData_잘_작동되는지() throws IOException {
+
+        WeatherGeoSearchDto given = new WeatherGeoSearchDto();
+        given.setLat(37.5132612);
+        given.setLon(127.0979449);
+        WeatherDivSearchDto given2 = new WeatherDivSearchDto();
+        given2.setAdminDivision("경기도 남양주시");
+        WeatherMidResultDto actual = weatherService.getWeekWeatherData(given2, given);
+
+        log.info(actual.toString());
+        assertThat(actual).isNotNull();
+
+    }
+
+    @Test
+    void getWeekTaWeatherData_잘_작동되는지() throws IOException {
+
+        WeatherMidResultDto actual = new WeatherMidResultDto();
+        actual = weatherService.getWeekTaWeatherData("11B10101", actual);
+
+        log.info(actual.toString());
+        assertThat(actual).isNotNull();
+
+    }
+
+    @Test
+    void getWeekLandWeatherData_잘_작동되는지() throws IOException {
+
+        WeatherMidResultDto actual = new WeatherMidResultDto();
+        actual = weatherService.getWeekLandWeatherData("11B00000", actual);
 
         log.info(actual.toString());
         assertThat(actual).isNotNull();

@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class WeatherResultDto {
+public class WeatherCurResultDto {
 
     @ApiModelProperty(required = true, value = "최저온도", example = "14")
     int minTemp;
@@ -24,8 +24,8 @@ public class WeatherResultDto {
     @ApiModelProperty(required = true, value = "현재온도", example = "19")
     int curTemp;
 
-    public static WeatherResultDto combineToDto(WeatherCurDto weatherCurDto, WeatherUltraCurDto weatherUltraCurDto) {
-        return WeatherResultDto.builder()
+    public static WeatherCurResultDto combineToDto(WeatherCurDto weatherCurDto, WeatherUltraCurDto weatherUltraCurDto) {
+        return WeatherCurResultDto.builder()
                 .minTemp(weatherCurDto.getMinTemp())
                 .maxTemp(weatherCurDto.getMaxTemp())
                 .rainProb(weatherCurDto.getRainProb())

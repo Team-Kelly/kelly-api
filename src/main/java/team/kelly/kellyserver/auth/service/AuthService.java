@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import team.kelly.kellyserver.auth.dto.LoginDto;
 import team.kelly.kellyserver.auth.dto.TokenDto;
 import team.kelly.kellyserver.auth.dto.TokenRequestDto;
-import team.kelly.kellyserver.auth.entity.RefreshToken;
 import team.kelly.kellyserver.auth.repository.RefreshTokenRepository;
 import team.kelly.kellyserver.common.security.TokenProvider;
+import team.kelly.kellyserver.db.entity.RefreshToken;
 
 @Service
 public class AuthService {

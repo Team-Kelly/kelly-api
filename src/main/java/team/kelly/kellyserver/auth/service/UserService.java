@@ -4,10 +4,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.kelly.kellyserver.auth.dto.UserDto;
-import team.kelly.kellyserver.auth.entity.Authority;
-import team.kelly.kellyserver.auth.entity.User;
 import team.kelly.kellyserver.auth.repository.UserRepository;
 import team.kelly.kellyserver.auth.util.SecurityUtil;
+import team.kelly.kellyserver.db.entity.Authority;
+import team.kelly.kellyserver.db.entity.User;
 
 import java.util.Collections;
 import java.util.Optional;

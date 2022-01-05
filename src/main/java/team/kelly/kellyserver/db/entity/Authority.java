@@ -1,4 +1,4 @@
-package team.kelly.kellyserver.auth.entity;
+package team.kelly.kellyserver.db.entity;
 
 
 import lombok.*;

@@ -2,7 +2,7 @@ package team.kelly.kellyserver.auth.repository;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import team.kelly.kellyserver.auth.entity.User;
+import team.kelly.kellyserver.db.entity.User;
 
 import java.util.Optional;
 

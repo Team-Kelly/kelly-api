@@ -7,8 +7,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import team.kelly.kellyserver.auth.entity.User;
 import team.kelly.kellyserver.auth.repository.UserRepository;
+import team.kelly.kellyserver.db.entity.User;
 
 import java.util.List;
 import java.util.stream.Collectors;

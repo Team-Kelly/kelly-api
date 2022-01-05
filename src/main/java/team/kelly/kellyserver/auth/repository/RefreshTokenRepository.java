@@ -2,7 +2,7 @@ package team.kelly.kellyserver.auth.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import team.kelly.kellyserver.auth.entity.RefreshToken;
+import team.kelly.kellyserver.db.entity.RefreshToken;
 
 import java.util.Optional;
 
