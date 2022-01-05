@@ -2,10 +2,7 @@ package team.kelly.kellyserver.mock;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import team.kelly.kellyserver.mock.dto.MockRouteDto;
 import team.kelly.kellyserver.mock.dto.MockRouteSearchDto;
 import team.kelly.kellyserver.mock.dto.MockWelcomPhraseDto;
@@ -25,7 +22,7 @@ public class MockApiController {
     }
 
     @PostMapping("/routeList")
-    public List<MockRouteDto> getRouteList(MockRouteSearchDto mockRouteSearchDto) {
+    public List<MockRouteDto> getRouteList(@RequestBody MockRouteSearchDto mockRouteSearchDto) {
         log.info(mockRouteSearchDto.toString());
         List<MockRouteDto> mockRouteDtoList = new ArrayList<>();
         mockRouteDtoList.add(RouteDataGenerator.get1());
