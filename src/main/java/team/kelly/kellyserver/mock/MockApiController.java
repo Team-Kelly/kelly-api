@@ -2,10 +2,11 @@ package team.kelly.kellyserver.mock;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
-import team.kelly.kellyserver.mock.dto.MockRouteDto;
-import team.kelly.kellyserver.mock.dto.MockRouteSearchDto;
-import team.kelly.kellyserver.mock.dto.MockWelcomPhraseDto;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import team.kelly.kellyserver.mock.dto.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +17,19 @@ import java.util.List;
 @RequestMapping(value = "/api/mock")
 public class MockApiController {
 
-    @GetMapping("/welcomPhrase")
-    public MockWelcomPhraseDto getWelcomePhrase() {
-        return new MockWelcomPhraseDto(1, "아침부터 비를 맞았네..\n어제는 날씨 좋았잖아..\n시작이 반인데..!");
+    @PostMapping("/weather/phrase")
+    public MockWelcomPhraseDto getWeatherPhrase(@RequestBody MockWeatherSearchDto mockWeatherSearchDto) {
+        log.info(mockWeatherSearchDto.toString());
+        return new MockWelcomPhraseDto(1, "오늘은 하루종일 화창한 하루!\n좋은 하루 되세요:)");
     }
 
-    @PostMapping("/routeList")
+    @PostMapping("/weather/dayList")
+    public List<MockWeatherDto> getWeatherDayList(@RequestBody MockWeatherSearchDto mockWeatherSearchDto) {
+        log.info(mockWeatherSearchDto.toString());
+        return WeatherDataGenerator.getDayWeatherList();
+    }
+
+    @PostMapping("/navi/routeList")
     public List<MockRouteDto> getRouteList(@RequestBody MockRouteSearchDto mockRouteSearchDto) {
         log.info(mockRouteSearchDto.toString());
         List<MockRouteDto> mockRouteDtoList = new ArrayList<>();
@@ -36,8 +44,6 @@ public class MockApiController {
         mockRouteDtoList.add(RouteDataGenerator.get9());
 
         return mockRouteDtoList;
-
     }
-
 
 }

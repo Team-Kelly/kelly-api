@@ -11,6 +11,8 @@ public class MockBusNodeDto extends MockNode {
     String endStation;
     int stationCnt;
     String busName;
+    String busId; //오픈api에서 도착 잔여 시간 조회를 위한 고유 버스 id
+    String stationId; //오픈api에서 도착 잔여 시간 조회를 위한 고유 정류장 id
 
     public MockBusNodeDto() {
         this.setTransportation("bus");
