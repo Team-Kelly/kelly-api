@@ -19,11 +19,23 @@ public class NavigationService {
 
     @Value("${apikey.odsay}")
     String odsayApiKey;
-    static final String busUrl = "https://bus.go.kr/xmlRequest/getStationByUid.jsp?strBusNumber=";
+    static final String naviApi = "https://api.odsay.com/v1/api/searchPubTransPathR?apiKey=";
 
     public List<RouteDto> getNavigationRuote(RouteSearchDto routeSearchDto) throws IOException {
 
-        String jsonStr = ApiUtility.callApi("https://api.odsay.com/v1/api/searchPubTransPathR?apiKey=" + odsayApiKey + "&lang=0&output=xml&SX=127.2849703&SY=37.6559183&EX=127.0913788&EY=37.5132609&OPT=0&SearchType=0&SearchPathType=0");
+        String OPT = "0";
+        String SearchPathType = "0";
+
+
+        if (routeSearchDto.getOption().equals("1")) { //옵션 지하철
+            OPT = "1";
+            SearchPathType = "1";
+        } else if (routeSearchDto.getOption().equals("2")) { //옵션 버스
+            OPT = "1";
+            SearchPathType = "2";
+        }
+
+        String jsonStr = ApiUtility.callApi(naviApi + odsayApiKey + "&lang=0&output=xml&SX=" + routeSearchDto.getStartX() + "&SY=" + routeSearchDto.getStartY() + "&EX=" + routeSearchDto.getEndX() + "&EY=" + routeSearchDto.getEndY() + "&OPT=" + OPT + "&SearchType=0&SearchPathType=" + SearchPathType);
         JSONObject jsonObject = new JSONObject(jsonStr);
         jsonObject = jsonObject.getJSONObject("message").getJSONObject("result");
 
