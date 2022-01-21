@@ -16,13 +16,11 @@ import java.util.List;
 @Service
 public class NavigationService {
 
-
     @Value("${apikey.odsay}")
     String odsayApiKey;
     static final String naviApi = "https://api.odsay.com/v1/api/searchPubTransPathR?apiKey=";
     static final String busStationDetailApi = "https://api.odsay.com/v1/api/busStationInfo?apiKey=";
     static final String busIdDetailApi = "https://api.odsay.com/v1/api/busLaneDetail?apiKey=";
-
 
     public List<RouteDto> getNavigationRuote(RouteSearchDto routeSearchDto) throws IOException {
 
@@ -40,8 +38,6 @@ public class NavigationService {
         String jsonStr = ApiUtility.callApi(naviApi + odsayApiKey + "&lang=0&output=xml&SX=" + routeSearchDto.getStartX() + "&SY=" + routeSearchDto.getStartY() + "&EX=" + routeSearchDto.getEndX() + "&EY=" + routeSearchDto.getEndY() + "&OPT=" + OPT + "&SearchType=0&SearchPathType=" + SearchPathType);
         JSONObject jsonObject = new JSONObject(jsonStr);
         jsonObject = jsonObject.getJSONObject("message").getJSONObject("result");
-
-        log.info(String.valueOf(jsonStr));
 
         JSONArray jsonPathArray = new JSONArray();
         if (jsonObject.get("path") instanceof JSONArray) {
@@ -91,15 +87,17 @@ public class NavigationService {
                         laneArray.put(node.getJSONObject("lane"));
                     }
 
-                    String stationCityCode = getBusStationCityCode(String.valueOf(node.getInt("startID")));
+                    JSONObject stationDetailJson = getBusStationDetail(String.valueOf(node.getInt("startID")));
+                    String stationCityCode = getBusStationCityCode(stationDetailJson);
+                    String stationId = getBusStationId(stationDetailJson, stationCityCode);
 
                     busNodeDto.setData(
                             node.getString("startName"),
                             node.getString("endName"),
                             node.getInt("stationCount"),
                             laneArray.getJSONObject(0).get("busNo").toString(),
-                            getBusbusRouteID(laneArray.getJSONObject(0).get("busID").toString()),
-                            String.valueOf(node.getInt("startID")),
+                            getBusRouteID(laneArray.getJSONObject(0).get("busID").toString()),
+                            stationId,
                             stationCityCode
                     );
 
@@ -124,25 +122,38 @@ public class NavigationService {
 
     }
 
-    public String getBusStationCityCode(String odsayBusStationID) throws IOException {
+    public JSONObject getBusStationDetail(String odsayBusStationID) throws IOException {
 
         String jsonStr = ApiUtility.callApi(busStationDetailApi + odsayApiKey + "&lang=0&output=xml&stationID=" + odsayBusStationID);
         JSONObject jsonObject = new JSONObject(jsonStr);
         jsonObject = jsonObject.getJSONObject("message").getJSONObject("result");
 
-        return String.valueOf(jsonObject.getInt("stationCityCode"));
+        return jsonObject;
 
     }
 
-    public String getBusbusRouteID(String odsayBusID) throws IOException {
+    public String getBusStationCityCode(JSONObject odsayBusStationDetail) {
+
+        return String.valueOf(odsayBusStationDetail.getInt("stationCityCode"));
+
+    }
+
+    public String getBusRouteID(String odsayBusID) throws IOException {
 
         String jsonStr = ApiUtility.callApi(busIdDetailApi + odsayApiKey + "&lang=0&output=xml&busID=" + odsayBusID);
         JSONObject jsonObject = new JSONObject(jsonStr);
         jsonObject = jsonObject.getJSONObject("message").getJSONObject("result");
 
-        return String.valueOf(jsonObject.getInt("busLocalBlID"));
+        return jsonObject.get("busLocalBlID").toString();
 
     }
 
+    public String getBusStationId(JSONObject odsayBusStationDetail, String cityCode) {
 
+        if (cityCode.equals("1000")) {
+            return odsayBusStationDetail.get("arsID").toString().replace("-", "");
+        } else {
+            return odsayBusStationDetail.get("localStationID").toString();
+        }
+    }
 }
