@@ -9,4 +9,6 @@ public class BusSearchDto {
     private String busNumber;
     @ApiModelProperty(example = "\"11457\"")
     private String stationNumber;
+    @ApiModelProperty(example = "\"1000\"")
+    private String cityCode;
 }

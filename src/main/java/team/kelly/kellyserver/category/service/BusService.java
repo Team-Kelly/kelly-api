@@ -17,13 +17,57 @@ public class BusService {
 
     @Value("${apikey.govoepnapi}")
     String govOpenApiKey;
-    static final String busUrl = "https://bus.go.kr/xmlRequest/getStationByUid.jsp?strBusNumber=";
+    static final String seoulBusUrl = "https://bus.go.kr/xmlRequest/getStationByUid.jsp?strBusNumber=";
 
     public BusResultDto getBusArriveData(BusSearchDto infoVO) throws IOException {
 
+        if (infoVO.getCityCode().equals("1000")) {
+            return getSeoulBusArriveData(infoVO);
+        } else {
+            return getGyeonggiBusArriveData(infoVO);
+        }
+
+//        } catch (Exception e) {
+//            log.error(e.getMessage() + e.getStackTrace());
+//            return "api call error";
+//        }
+    }
+
+    public BusResultDto getSeoulBusArriveData(BusSearchDto infoVO) throws IOException {
+
         BusResultDto result = new BusResultDto();
 
-        String jsonStr = ApiUtility.callApi(busUrl + infoVO.getStationNumber());
+        String jsonStr = ApiUtility.callApi(seoulBusUrl + infoVO.getStationNumber());
+        JSONObject jsonObject = new JSONObject(jsonStr);
+        jsonObject = jsonObject.getJSONObject("Msg");
+
+        log.info(String.valueOf(jsonStr));
+
+        JSONArray jsonArray = new JSONArray();
+        if (jsonObject.get("stationList") instanceof JSONArray) {
+            jsonArray = jsonObject.getJSONArray("stationList");
+        } else {
+            jsonArray.put(jsonObject.getJSONObject("stationList"));
+        }
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject obj = jsonArray.getJSONObject(i);
+
+            String rtNm = obj.get("rtNm").toString();
+
+            if (rtNm.equals(infoVO.getBusNumber())) {
+                result.setArrmsg1(obj.getString("arrmsg1"));
+                result.setArrmsg2(obj.getString("arrmsg2"));
+            }
+        }
+        return result;
+    }
+
+    public BusResultDto getGyeonggiBusArriveData(BusSearchDto infoVO) throws IOException {
+
+        BusResultDto result = new BusResultDto();
+
+        String jsonStr = ApiUtility.callApi(seoulBusUrl + infoVO.getStationNumber());
         JSONObject jsonObject = new JSONObject(jsonStr);
         jsonObject = jsonObject.getJSONObject("Msg");
 
@@ -49,10 +93,5 @@ public class BusService {
 
         return result;
 
-//        } catch (Exception e) {
-//            log.error(e.getMessage() + e.getStackTrace());
-//            return "api call error";
-//        }
     }
-
 }

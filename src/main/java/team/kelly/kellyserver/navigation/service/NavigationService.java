@@ -20,12 +20,14 @@ public class NavigationService {
     @Value("${apikey.odsay}")
     String odsayApiKey;
     static final String naviApi = "https://api.odsay.com/v1/api/searchPubTransPathR?apiKey=";
+    static final String busStationDetailApi = "https://api.odsay.com/v1/api/busStationInfo?apiKey=";
+    static final String busIdDetailApi = "https://api.odsay.com/v1/api/busLaneDetail?apiKey=";
+
 
     public List<RouteDto> getNavigationRuote(RouteSearchDto routeSearchDto) throws IOException {
 
         String OPT = "0";
         String SearchPathType = "0";
-
 
         if (routeSearchDto.getOption().equals("1")) { //옵션 지하철
             OPT = "1";
@@ -89,7 +91,17 @@ public class NavigationService {
                         laneArray.put(node.getJSONObject("lane"));
                     }
 
-                    busNodeDto.setData(node.getString("startName"), node.getString("endName"), node.getInt("stationCount"), laneArray.getJSONObject(0).get("busNo").toString(), laneArray.getJSONObject(0).get("busID").toString(), String.valueOf(node.getInt("startID")));
+                    String stationCityCode = getBusStationCityCode(String.valueOf(node.getInt("startID")));
+
+                    busNodeDto.setData(
+                            node.getString("startName"),
+                            node.getString("endName"),
+                            node.getInt("stationCount"),
+                            laneArray.getJSONObject(0).get("busNo").toString(),
+                            getBusbusRouteID(laneArray.getJSONObject(0).get("busID").toString()),
+                            String.valueOf(node.getInt("startID")),
+                            stationCityCode
+                    );
 
                     pathNodeList.add(busNodeDto);
                 } else if (node.getInt("trafficType") == 3) {//도보
@@ -99,11 +111,8 @@ public class NavigationService {
                     if (walkNodeDto.getWalkMeter() == 0) {
                         continue;
                     }
-
                     pathNodeList.add(walkNodeDto);
-
                 }
-
             }
 
             RouteDto routeDto = new RouteDto(pathNodeList, time);
@@ -112,6 +121,26 @@ public class NavigationService {
         }
 
         return routeDtoList;
+
+    }
+
+    public String getBusStationCityCode(String odsayBusStationID) throws IOException {
+
+        String jsonStr = ApiUtility.callApi(busStationDetailApi + odsayApiKey + "&lang=0&output=xml&stationID=" + odsayBusStationID);
+        JSONObject jsonObject = new JSONObject(jsonStr);
+        jsonObject = jsonObject.getJSONObject("message").getJSONObject("result");
+
+        return String.valueOf(jsonObject.getInt("stationCityCode"));
+
+    }
+
+    public String getBusbusRouteID(String odsayBusID) throws IOException {
+
+        String jsonStr = ApiUtility.callApi(busIdDetailApi + odsayApiKey + "&lang=0&output=xml&busID=" + odsayBusID);
+        JSONObject jsonObject = new JSONObject(jsonStr);
+        jsonObject = jsonObject.getJSONObject("message").getJSONObject("result");
+
+        return String.valueOf(jsonObject.getInt("busLocalBlID"));
 
     }
 
