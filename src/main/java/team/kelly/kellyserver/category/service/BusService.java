@@ -18,6 +18,8 @@ public class BusService {
     @Value("${apikey.govoepnapi}")
     String govOpenApiKey;
     static final String seoulBusUrl = "https://bus.go.kr/xmlRequest/getStationByUid.jsp?strBusNumber=";
+    static final String gyeonggiBusUrl = "http://apis.data.go.kr/6410000/busarrivalservice/getBusArrivalList?serviceKey=";
+
 
     public BusResultDto getBusArriveData(BusSearchDto infoVO) throws IOException {
 
@@ -27,10 +29,6 @@ public class BusService {
             return getGyeonggiBusArriveData(infoVO);
         }
 
-//        } catch (Exception e) {
-//            log.error(e.getMessage() + e.getStackTrace());
-//            return "api call error";
-//        }
     }
 
     public BusResultDto getSeoulBusArriveData(BusSearchDto infoVO) throws IOException {
@@ -53,9 +51,9 @@ public class BusService {
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject obj = jsonArray.getJSONObject(i);
 
-            String rtNm = obj.get("rtNm").toString();
+            String rtId = obj.get("rtId").toString();
 
-            if (rtNm.equals(infoVO.getBusNumber())) {
+            if (rtId.equals(infoVO.getBusNumber())) {
                 result.setArrmsg1(obj.getString("arrmsg1"));
                 result.setArrmsg2(obj.getString("arrmsg2"));
             }
@@ -67,27 +65,27 @@ public class BusService {
 
         BusResultDto result = new BusResultDto();
 
-        String jsonStr = ApiUtility.callApi(seoulBusUrl + infoVO.getStationNumber());
+        String jsonStr = ApiUtility.callApi(gyeonggiBusUrl + govOpenApiKey + "&stationId=" + infoVO.getStationNumber());
         JSONObject jsonObject = new JSONObject(jsonStr);
-        jsonObject = jsonObject.getJSONObject("Msg");
+        jsonObject = jsonObject.getJSONObject("response").getJSONObject("msgBody");
 
         log.info(String.valueOf(jsonStr));
 
         JSONArray jsonArray = new JSONArray();
-        if (jsonObject.get("stationList") instanceof JSONArray) {
-            jsonArray = jsonObject.getJSONArray("stationList");
+        if (jsonObject.get("busArrivalList") instanceof JSONArray) {
+            jsonArray = jsonObject.getJSONArray("busArrivalList");
         } else {
-            jsonArray.put(jsonObject.getJSONObject("stationList"));
+            jsonArray.put(jsonObject.getJSONObject("busArrivalList"));
         }
 
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject obj = jsonArray.getJSONObject(i);
 
-            String rtNm = obj.get("rtNm").toString();
+            String routeId = obj.get("routeId").toString();
 
-            if (rtNm.equals(infoVO.getBusNumber())) {
-                result.setArrmsg1(obj.getString("arrmsg1"));
-                result.setArrmsg2(obj.getString("arrmsg2"));
+            if (routeId.equals(infoVO.getBusNumber())) {
+                result.setArrmsg1(obj.get("predictTime1").toString() + "분");
+                result.setArrmsg2(obj.get("predictTime2").toString() + "분");
             }
         }
 
