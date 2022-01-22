@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import team.kelly.kellyserver.common.utility.ApiUtility;
+import team.kelly.kellyserver.common.utility.ConvertUtility;
 import team.kelly.kellyserver.navigation.dto.*;
 
 import java.io.IOException;
@@ -70,8 +71,11 @@ public class NavigationService {
 
                 if (node.getInt("trafficType") == 1) {//지하철
 
+                    String wayCode = String.valueOf(node.getInt("wayCode")).equals("1") ? "상행" : "하행";
+                    String subwayCode = ConvertUtility.convertOdsaySubwayCodeToLocalCode(node.getJSONObject("lane").getInt("subwayCode"));
+
                     SubwayNodeDto subwayNodeDto = new SubwayNodeDto();
-                    subwayNodeDto.setData(node.getString("startName"), node.getString("endName"), node.getInt("stationCount"), node.getJSONObject("lane").getString("name"), String.valueOf(node.getInt("startID")), String.valueOf(node.getInt("wayCode")), String.valueOf(node.getJSONObject("lane").getInt("subwayCityCode")));
+                    subwayNodeDto.setData(node.getString("startName"), node.getString("endName"), node.getInt("stationCount"), node.getJSONObject("lane").getString("name"), String.valueOf(node.getInt("startID")), wayCode, subwayCode);
 
                     pathNodeList.add(subwayNodeDto);
 

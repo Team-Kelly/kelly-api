@@ -72,13 +72,13 @@ public class SubwayService {
                     && total < 2) {
                 if (total == 0)
                     if (actualRemain > 0) {
-                        result.setArrmsg1(ConvertUtility.ConvertSecToTime(actualRemain));
+                        result.setArrmsg1(ConvertUtility.convertSecToTime(actualRemain));
                     } else {
                         result.setArrmsg1(arvlMsg2);
                     }
                 if (total == 1)
                     if (actualRemain > 0) {
-                        result.setArrmsg2(ConvertUtility.ConvertSecToTime(actualRemain));
+                        result.setArrmsg2(ConvertUtility.convertSecToTime(actualRemain));
                     } else {
                         result.setArrmsg2(arvlMsg2);
                     }
