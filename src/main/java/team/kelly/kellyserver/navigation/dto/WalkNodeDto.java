@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class WalkNodeDto extends PathNode {
 
-    int walkMeter;
+    int walkMeter; //도보거리(단위: 미터)
 
     public WalkNodeDto() {
         this.setTransportation("walk");

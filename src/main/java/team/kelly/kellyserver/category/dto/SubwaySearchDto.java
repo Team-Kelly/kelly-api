@@ -7,11 +7,10 @@ import lombok.Data;
 public class SubwaySearchDto {
 
     @ApiModelProperty(example = "서울")
-    private String statnNm;
+    private String stationName;
     @ApiModelProperty(example = "상행")
-    private String updnLine;
+    private String direction;
     @ApiModelProperty(example = "\"1001\"")
-    private String subwayId;
-
-
+    private String lineId;
+    
 }
