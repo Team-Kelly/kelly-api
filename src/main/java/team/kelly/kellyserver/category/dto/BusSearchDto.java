@@ -5,10 +5,10 @@ import lombok.Data;
 
 @Data
 public class BusSearchDto {
-    @ApiModelProperty(example = "\"261\"")
-    private String busNumber;
-    @ApiModelProperty(example = "\"11457\"")
-    private String stationNumber;
+    @ApiModelProperty(example = "\"122900003\"")
+    private String busId;
+    @ApiModelProperty(example = "\"23489\"")
+    private String stationId;
     @ApiModelProperty(example = "\"1000\"")
     private String cityCode;
 }

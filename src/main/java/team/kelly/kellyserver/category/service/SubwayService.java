@@ -29,7 +29,7 @@ public class SubwayService {
 
         SubwayResultDto result = new SubwayResultDto();
 
-        String jsonStr = ApiUtility.callApi(subwayUrlPrefix + seoulOpenApiKey + subwayUrlSuffix + URLEncoder.encode(infoVO.getStatnNm(), "UTF-8"));
+        String jsonStr = ApiUtility.callApi(subwayUrlPrefix + seoulOpenApiKey + subwayUrlSuffix + URLEncoder.encode(infoVO.getStationName(), "UTF-8"));
         JSONObject jsonObject = new JSONObject(jsonStr);
         jsonObject = jsonObject.getJSONObject("realtimeStationArrival");
 
@@ -66,7 +66,7 @@ public class SubwayService {
             int delaySec = (int) ((nowDate.getTime() - recptnDtDate.getTime()) / 1000);
             int actualRemain = arriveSec - delaySec;
 
-            if (subwayId.equals(infoVO.getSubwayId()) && updnLine.equals(infoVO.getUpdnLine())
+            if (subwayId.equals(infoVO.getLineId()) && updnLine.equals(infoVO.getDirection())
                     && !arvlCd.equals("0") && !arvlCd.equals("1") && !arvlCd.equals("2")
                     && !btrainSttus.equals("ITX") && !btrainSttus.equals("급행")
                     && total < 2) {

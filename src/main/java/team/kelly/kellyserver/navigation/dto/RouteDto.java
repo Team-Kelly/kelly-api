@@ -9,5 +9,5 @@ import java.util.List;
 @AllArgsConstructor
 public class RouteDto {
     List<PathNode> pathNodeList;
-    int durationTime;
+    int durationTime; //소요시간(분)
 }

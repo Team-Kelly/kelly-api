@@ -35,7 +35,7 @@ public class BusService {
 
         BusResultDto result = new BusResultDto();
 
-        String jsonStr = ApiUtility.callApi(seoulBusUrl + infoVO.getStationNumber());
+        String jsonStr = ApiUtility.callApi(seoulBusUrl + infoVO.getStationId());
         JSONObject jsonObject = new JSONObject(jsonStr);
         jsonObject = jsonObject.getJSONObject("Msg");
 
@@ -53,7 +53,7 @@ public class BusService {
 
             String rtId = obj.get("rtId").toString();
 
-            if (rtId.equals(infoVO.getBusNumber())) {
+            if (rtId.equals(infoVO.getBusId())) {
                 result.setArrmsg1(obj.getString("arrmsg1"));
                 result.setArrmsg2(obj.getString("arrmsg2"));
             }
@@ -65,7 +65,7 @@ public class BusService {
 
         BusResultDto result = new BusResultDto();
 
-        String jsonStr = ApiUtility.callApi(gyeonggiBusUrl + govOpenApiKey + "&stationId=" + infoVO.getStationNumber());
+        String jsonStr = ApiUtility.callApi(gyeonggiBusUrl + govOpenApiKey + "&stationId=" + infoVO.getStationId());
         JSONObject jsonObject = new JSONObject(jsonStr);
         jsonObject = jsonObject.getJSONObject("response").getJSONObject("msgBody");
 
@@ -83,7 +83,7 @@ public class BusService {
 
             String routeId = obj.get("routeId").toString();
 
-            if (routeId.equals(infoVO.getBusNumber())) {
+            if (routeId.equals(infoVO.getBusId())) {
                 result.setArrmsg1(obj.get("predictTime1").toString() + "분");
                 result.setArrmsg2(obj.get("predictTime2").toString() + "분");
             }
