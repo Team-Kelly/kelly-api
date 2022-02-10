@@ -1,37 +1,33 @@
 package team.kelly.kellyserver.category.dto;
 
+import com.google.api.client.util.Lists;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 public class WeatherResultDto {
 
-    @ApiModelProperty(required = true, value = "최저온도", example = "14")
-    int minTemp;
-    @ApiModelProperty(required = true, value = "최고온도", example = "28")
-    int maxTemp;
-    @ApiModelProperty(required = true, value = "강수확률", example = "0")
-    int rainProb;
-    @ApiModelProperty(required = true, value = "강수상태", example = "1")
-    int rainStatus;
-    @ApiModelProperty(required = true, value = "날씨상태", example = "0")
-    int skyStatus;
-    @ApiModelProperty(required = true, value = "현재온도", example = "19")
-    int curTemp;
+    @ApiModelProperty(required = true, value = "강수확률")
+    List<Integer> rainProb = Lists.newArrayList();
+    @ApiModelProperty(required = true, value = "강수상태코드")
+    List<Integer> rainStatusCode = Lists.newArrayList();
+    @ApiModelProperty(required = true, value = "강수상태설명")
+    List<String> rainStatusDetail = Lists.newArrayList();
+    @ApiModelProperty(required = true, value = "하늘상태코드")
+    List<Integer> skyStatusCode = Lists.newArrayList();
+    @ApiModelProperty(required = true, value = "하늘상태설명")
+    List<String> skyStatusDetail = Lists.newArrayList();
+    @ApiModelProperty(required = true, value = "날씨상태코드")
+    List<Integer> weatherStatusCode = Lists.newArrayList();
+    @ApiModelProperty(required = true, value = "날씨상태설명")
+    List<String> weatherStatusDetail = Lists.newArrayList();
+    @ApiModelProperty(required = true, value = "온도")
+    List<Integer> temp = Lists.newArrayList();
 
-    public static WeatherResultDto combineToDto(WeatherCurDto weatherCurDto, WeatherUltraCurDto weatherUltraCurDto) {
-        return WeatherResultDto.builder()
-                .minTemp(weatherCurDto.getMinTemp())
-                .maxTemp(weatherCurDto.getMaxTemp())
-                .rainProb(weatherCurDto.getRainProb())
-                .rainStatus(weatherUltraCurDto.getRainStatus())
-                .skyStatus(weatherUltraCurDto.getSkyStatus())
-                .curTemp(weatherUltraCurDto.getCurTemp())
-                .build();
-    }
 }
