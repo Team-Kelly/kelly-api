@@ -1,6 +1,7 @@
 package team.kelly.kellyserver.category.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import static java.lang.Math.min;
 import static team.kelly.kellyserver.common.utility.CustomJSONUtility.sortJsonArray;
 
 @Slf4j
@@ -29,13 +31,22 @@ public class WeatherService {
     static final String VILAGE_WEATHER_URL_PREFIX = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=";
 
     static String[] SKY_STATUS = {"없음", "맑음", "없음", "구름많음", "흐림"};
-    static String[] PTY_STATUS = {"없음", "비", "비/눈", "눈", "소나기"};
+    static String[] RAIN_STATUS = {"없음", "비", "비/눈", "눈", "소나기"};
+    static String[] WEATHER_STATUS = {"맑음", "구름많음", "흐림", "비", "비/눈", "눈", "소나기"};
 
-    public WeatherResultDto getCurrentWeatherData(WeatherSearchDto infoVO) throws IOException {
+    public WeatherResultDto getOneDayWeatherData(WeatherSearchDto infoVO) throws IOException {
 
         GridValueDto gridValueDto = TransLocalPoint.getGridxy(infoVO.getLat(), infoVO.getLon());
 
         WeatherResultDto resultDto = getVilageFcstWeatherData(gridValueDto);
+
+        for (int i = 0; i < min(resultDto.getSkyStatusCode().size(), resultDto.getRainStatusCode().size()); i++) {
+
+            int weatherStatusCode = getWeatherStatusByPriority(resultDto.getSkyStatusCode().get(i), resultDto.getRainStatusCode().get(i));
+            resultDto.getWeatherStatusCode().add(weatherStatusCode);
+            resultDto.getWeatherStatusDetail().add(WEATHER_STATUS[weatherStatusCode]);
+
+        }
 
         return resultDto;
 
@@ -83,14 +94,20 @@ public class WeatherService {
             for (int k = 0; k < 200; k++) {
                 JSONObject obj = jsonArrayForProb.getJSONObject(k);
 
-                if (obj.getString("category").equals("POP"))
+                if (obj.getString("category").equals("POP")) {
                     result.getRainProb().add(obj.getInt("fcstValue"));
-                if (obj.getString("category").equals("PTY"))
-                    result.getRainStatus().add(obj.getInt("fcstValue"));
-                if (obj.getString("category").equals("SKY"))
-                    result.getSkyStatus().add(obj.getInt("fcstValue"));
-                if (obj.getString("category").equals("TMP"))
+                }
+                if (obj.getString("category").equals("PTY")) {
+                    result.getRainStatusCode().add(obj.getInt("fcstValue"));
+                    result.getRainStatusDetail().add(RAIN_STATUS[obj.getInt("fcstValue")]);
+                }
+                if (obj.getString("category").equals("SKY")) {
+                    result.getSkyStatusCode().add(obj.getInt("fcstValue"));
+                    result.getSkyStatusDetail().add(SKY_STATUS[obj.getInt("fcstValue")]);
+                }
+                if (obj.getString("category").equals("TMP")) {
                     result.getTemp().add(obj.getInt("fcstValue"));
+                }
 
             }
         }
@@ -137,5 +154,26 @@ public class WeatherService {
         return sortJsonArray(jsonArray);
     }
 
+    /*
+    우선순위에 따라 날씨 상태를 결정한다
+    우선순위 눈>비/눈>비>소나기>흐림>구름많음>맑음
+     */
+    public int getWeatherStatusByPriority(int skyStatusCode, int rainStatusCode) {
+        if (rainStatusCode == ArrayUtils.indexOf(RAIN_STATUS, "눈")) {
+            return ArrayUtils.indexOf(WEATHER_STATUS, "눈");
+        } else if (rainStatusCode == ArrayUtils.indexOf(RAIN_STATUS, "비/눈")) {
+            return ArrayUtils.indexOf(WEATHER_STATUS, "비/눈");
+        } else if (rainStatusCode == ArrayUtils.indexOf(RAIN_STATUS, "비")) {
+            return ArrayUtils.indexOf(WEATHER_STATUS, "비");
+        } else if (rainStatusCode == ArrayUtils.indexOf(RAIN_STATUS, "소나기")) {
+            return ArrayUtils.indexOf(WEATHER_STATUS, "소나기");
+        } else if (skyStatusCode == ArrayUtils.indexOf(SKY_STATUS, "흐림")) {
+            return ArrayUtils.indexOf(WEATHER_STATUS, "흐림");
+        } else if (skyStatusCode == ArrayUtils.indexOf(SKY_STATUS, "구름많음")) {
+            return ArrayUtils.indexOf(WEATHER_STATUS, "구름많음");
+        } else {
+            return ArrayUtils.indexOf(WEATHER_STATUS, "맑음");
+        }
+    }
 
 }

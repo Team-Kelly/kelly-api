@@ -39,12 +39,12 @@ public class CategoryController {
         return subwayService.getSubwayArriveData(infoVO);
     }
 
-    @PostMapping(path = "/weather/current")
-    @ApiOperation(value = "현재 날씨 정보 api 호출",
-            notes = "현재 날씨의 기온, 하늘상태, 강수형태, 최고기온, 최저기온, 강수확률을 받아온다.\n" +
+    @PostMapping(path = "/weather/oneday")
+    @ApiOperation(value = "24시간 날씨 정보 api 호출",
+            notes = "현재 날씨의 기온, 하늘상태, 강수형태, 강수확률을 받아온다.\n" +
                     "skyStatus : 맑음(1), 구름많음(3), 흐림(4)\n" +
                     "rainStatus : 없음(0), 비(1), 비/눈(2), 눈(3), 소나기(4), 빗방울(5), 빗방울눈날림(6), 눈날림(7)\n")
     public WeatherResultDto getCurrentWeatherData(@RequestBody WeatherSearchDto infoVO) throws IOException {
-        return weatherService.getCurrentWeatherData(infoVO);
+        return weatherService.getOneDayWeatherData(infoVO);
     }
 }
