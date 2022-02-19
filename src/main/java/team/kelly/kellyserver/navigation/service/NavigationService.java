@@ -101,6 +101,7 @@ public class NavigationService {
                             node.getInt("stationCount"),
                             laneArray.getJSONObject(0).get("busNo").toString(),
                             getBusRouteID(laneArray.getJSONObject(0).get("busID").toString()),
+                            laneArray.getJSONObject(0).getInt("type"),
                             stationId,
                             stationCityCode
                     );

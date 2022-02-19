@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team.kelly.kellyserver.push.service.PushService;
 
+@Deprecated
 @Slf4j
 @RequiredArgsConstructor
 @RestController
