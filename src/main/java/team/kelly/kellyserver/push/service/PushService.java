@@ -6,6 +6,7 @@ import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import org.springframework.stereotype.Service;
 
+@Deprecated
 @Service
 public class PushService {
 
@@ -19,7 +20,7 @@ public class PushService {
                 .setNotification(notification)
                 .setToken(registrationToken)
                 .build();
-        
+
         // Send a message to the device corresponding to the provided
         // registration token.
         String response = FirebaseMessaging.getInstance().send(message);
