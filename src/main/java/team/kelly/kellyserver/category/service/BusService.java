@@ -35,7 +35,7 @@ public class BusService {
 
         BusResultDto result = new BusResultDto();
 
-        String jsonStr = ApiUtility.callApi(seoulBusUrl + infoVO.getStationId());
+        String jsonStr = ApiUtility.callApi(seoulBusUrl + infoVO.getStationId(), "xml");
         JSONObject jsonObject = new JSONObject(jsonStr);
         jsonObject = jsonObject.getJSONObject("Msg");
 
@@ -65,7 +65,7 @@ public class BusService {
 
         BusResultDto result = new BusResultDto();
 
-        String jsonStr = ApiUtility.callApi(gyeonggiBusUrl + govOpenApiKey + "&stationId=" + infoVO.getStationId());
+        String jsonStr = ApiUtility.callApi(gyeonggiBusUrl + govOpenApiKey + "&stationId=" + infoVO.getStationId(), "xml");
         JSONObject jsonObject = new JSONObject(jsonStr);
         jsonObject = jsonObject.getJSONObject("response").getJSONObject("msgBody");
 

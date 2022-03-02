@@ -15,7 +15,7 @@ import java.net.URL;
 @Slf4j
 public class ApiUtility {
 
-    public static String callApi(String url) throws IOException {
+    public static String callApi(String url, String mode) throws IOException {
         StringBuilder result = new StringBuilder();
 
         String urlStr = url;
@@ -36,7 +36,12 @@ public class ApiUtility {
 
         urlConnection.disconnect();
 
-        return XmlToJsonConvert(result.toString());
+        if (mode.equals("xml")) {
+            return XmlToJsonConvert(result.toString());
+        } else {
+            return result.toString();
+        }
+
     }
 
     public static String XmlToJsonConvert(String xml) {
