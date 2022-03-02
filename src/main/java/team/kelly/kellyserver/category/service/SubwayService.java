@@ -29,7 +29,7 @@ public class SubwayService {
 
         SubwayResultDto result = new SubwayResultDto();
 
-        String jsonStr = ApiUtility.callApi(subwayUrlPrefix + seoulOpenApiKey + subwayUrlSuffix + URLEncoder.encode(infoVO.getStationName(), "UTF-8"));
+        String jsonStr = ApiUtility.callApi(subwayUrlPrefix + seoulOpenApiKey + subwayUrlSuffix + URLEncoder.encode(infoVO.getStationName(), "UTF-8"), "xml");
         JSONObject jsonObject = new JSONObject(jsonStr);
         jsonObject = jsonObject.getJSONObject("realtimeStationArrival");
 

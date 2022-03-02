@@ -36,7 +36,7 @@ public class NavigationService {
             SearchPathType = "2";
         }
 
-        String jsonStr = ApiUtility.callApi(naviApi + odsayApiKey + "&lang=0&output=xml&SX=" + routeSearchDto.getStartX() + "&SY=" + routeSearchDto.getStartY() + "&EX=" + routeSearchDto.getEndX() + "&EY=" + routeSearchDto.getEndY() + "&OPT=" + OPT + "&SearchType=0&SearchPathType=" + SearchPathType);
+        String jsonStr = ApiUtility.callApi(naviApi + odsayApiKey + "&lang=0&output=xml&SX=" + routeSearchDto.getStartX() + "&SY=" + routeSearchDto.getStartY() + "&EX=" + routeSearchDto.getEndX() + "&EY=" + routeSearchDto.getEndY() + "&OPT=" + OPT + "&SearchType=0&SearchPathType=" + SearchPathType, "xml");
         JSONObject jsonObject = new JSONObject(jsonStr);
         jsonObject = jsonObject.getJSONObject("message").getJSONObject("result");
 
@@ -129,7 +129,7 @@ public class NavigationService {
 
     public JSONObject getBusStationDetail(String odsayBusStationID) throws IOException {
 
-        String jsonStr = ApiUtility.callApi(busStationDetailApi + odsayApiKey + "&lang=0&output=xml&stationID=" + odsayBusStationID);
+        String jsonStr = ApiUtility.callApi(busStationDetailApi + odsayApiKey + "&lang=0&output=xml&stationID=" + odsayBusStationID, "xml");
         JSONObject jsonObject = new JSONObject(jsonStr);
         jsonObject = jsonObject.getJSONObject("message").getJSONObject("result");
 
@@ -145,7 +145,7 @@ public class NavigationService {
 
     public String getBusRouteID(String odsayBusID) throws IOException {
 
-        String jsonStr = ApiUtility.callApi(busIdDetailApi + odsayApiKey + "&lang=0&output=xml&busID=" + odsayBusID);
+        String jsonStr = ApiUtility.callApi(busIdDetailApi + odsayApiKey + "&lang=0&output=xml&busID=" + odsayBusID, "xml");
         JSONObject jsonObject = new JSONObject(jsonStr);
         jsonObject = jsonObject.getJSONObject("message").getJSONObject("result");
 
