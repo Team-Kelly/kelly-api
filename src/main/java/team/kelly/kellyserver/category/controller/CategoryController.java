@@ -3,6 +3,8 @@ package team.kelly.kellyserver.category.controller;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,7 @@ import team.kelly.kellyserver.category.service.WeatherService;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -60,4 +63,12 @@ public class CategoryController {
     public List<WeatherResultDto> getOneDayWeatherData(@RequestBody WeatherSearchDto infoVO) throws IOException {
         return weatherService.getOneDayWeatherData(infoVO);
     }
+
+    @PostMapping(path = "/weather/phrase")
+    @ApiOperation(value = "날씨 멘트 api",
+            notes = "지금으로부터~6시간, 6시간후~12시간을 기준으로 현재/미래를 나누어 날씨 정보 멘트를 제공한다.")
+    public Map<String, String> getWheaterPhrase(@RequestBody WeatherSearchDto infoVO) throws IOException {
+        return weatherService.getWeatherPhrase(infoVO);
+    }
+
 }

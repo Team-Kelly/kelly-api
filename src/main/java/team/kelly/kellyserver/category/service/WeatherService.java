@@ -7,11 +7,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import team.kelly.kellyserver.category.dto.WeatherResultDto;
 import team.kelly.kellyserver.category.dto.WeatherSearchDto;
+import team.kelly.kellyserver.category.resource.WeatherPhrase;
 import team.kelly.kellyserver.common.utility.ApiUtility;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class WeatherService {
@@ -21,6 +22,33 @@ public class WeatherService {
     static final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/onecall?lat=%f&lon=%f&exclude=daily,minutely,current,alerts&units=metric&appid=%s";
 
     static String[] WEATHER_STATUS = {"맑음", "구름조금", "구름많음", "비", "천둥", "눈", "흐림"};
+    static String[] WEATHER_STATUS_PRIORITY = {"천둥", "눈", "비", "흐림", "구름많음", "구름적음", "맑음"};
+
+    public Map<String, String> getWeatherPhrase(WeatherSearchDto infoVO) throws IOException {
+        List<WeatherResultDto> oneDayWeather = getOneDayWeatherData(infoVO);
+
+        int curStatus = getWeatherStatusByPriority(oneDayWeather.subList(0, 6).stream().map(x->x.getWeatherStatusDetail()).collect(Collectors.toList()));
+        int futureStatus = getWeatherStatusByPriority(oneDayWeather.subList(6, 12).stream().map(x->x.getWeatherStatusDetail()).collect(Collectors.toList()));
+
+        Map<String, String> result = new HashMap<>();
+        result.put("phrase", WeatherPhrase.phrase[curStatus][futureStatus]);
+
+        return result;
+    }
+
+    private int getWeatherStatusByPriority(List<String> weatherStatusList){
+
+        List<String> list = Arrays.asList(WEATHER_STATUS);
+
+        for (String status : WEATHER_STATUS_PRIORITY) {
+            if (weatherStatusList.contains(status)){
+                return list.indexOf(status);
+            }
+        }
+
+        return 0;
+
+    }
 
     public List<WeatherResultDto> getOneDayWeatherData(WeatherSearchDto infoVO) throws IOException {
 
