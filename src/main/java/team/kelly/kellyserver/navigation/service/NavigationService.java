@@ -1,10 +1,12 @@
 package team.kelly.kellyserver.navigation.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import team.kelly.kellyserver.common.GlobalValue;
 import team.kelly.kellyserver.common.utility.ApiUtility;
 import team.kelly.kellyserver.common.utility.ConvertUtility;
 import team.kelly.kellyserver.navigation.dto.*;
@@ -15,15 +17,21 @@ import java.util.List;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class NavigationService {
 
-    @Value("${apikey.odsay}")
-    String odsayApiKey;
     static final String naviApi = "https://api.odsay.com/v1/api/searchPubTransPathR?apiKey=";
     static final String busStationDetailApi = "https://api.odsay.com/v1/api/busStationInfo?apiKey=";
     static final String busIdDetailApi = "https://api.odsay.com/v1/api/busLaneDetail?apiKey=";
+    private final GlobalValue globalValue;
+    @Value("${apikey.odsay}")
+    String odsayApiKey;
 
-    public List<RouteDto> getNavigationRuote(RouteSearchDto routeSearchDto) throws IOException {
+    public List<RouteDto> getNavigationRoute(RouteSearchDto routeSearchDto) throws IOException {
+
+        if (globalValue.isOdsayCallExceed()) {
+            return new ArrayList<>();
+        }
 
         String OPT = "0";
         String SearchPathType = "0";
@@ -36,7 +44,11 @@ public class NavigationService {
             SearchPathType = "2";
         }
 
+
         String jsonStr = ApiUtility.callApi(naviApi + odsayApiKey + "&lang=0&output=xml&SX=" + routeSearchDto.getStartX() + "&SY=" + routeSearchDto.getStartY() + "&EX=" + routeSearchDto.getEndX() + "&EY=" + routeSearchDto.getEndY() + "&OPT=" + OPT + "&SearchType=0&SearchPathType=" + SearchPathType, "xml");
+
+        globalValue.increaseOdsayCallCount();
+
         JSONObject jsonObject = new JSONObject(jsonStr);
         jsonObject = jsonObject.getJSONObject("message").getJSONObject("result");
 
@@ -146,6 +158,9 @@ public class NavigationService {
     public String getBusRouteID(String odsayBusID) throws IOException {
 
         String jsonStr = ApiUtility.callApi(busIdDetailApi + odsayApiKey + "&lang=0&output=xml&busID=" + odsayBusID, "xml");
+
+        globalValue.increaseOdsayCallCount();
+
         JSONObject jsonObject = new JSONObject(jsonStr);
         jsonObject = jsonObject.getJSONObject("message").getJSONObject("result");
 
