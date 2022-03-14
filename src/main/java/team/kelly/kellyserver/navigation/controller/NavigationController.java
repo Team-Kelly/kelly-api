@@ -27,7 +27,8 @@ public class NavigationController {
                     "버스 정보의 경우 busId, cityCode, (start)stationId, \n" +
                     "지하철 정보의 경우 direction, lineId, stationName 정보의 저장이 필요하다.")
     public List<RouteDto> getNavigationRoute(@RequestBody RouteSearchDto routeSearchDto) throws IOException {
-        return navigationService.getNavigationRuote(routeSearchDto);
+
+        return navigationService.getNavigationRoute(routeSearchDto);
     }
 
 }
