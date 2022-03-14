@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import team.kelly.kellyserver.mock.dto.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -18,12 +20,14 @@ import java.util.List;
 public class MockApiController {
 
     @PostMapping("/weather/phrase")
-    public MockWelcomPhraseDto getWeatherPhrase(@RequestBody MockWeatherSearchDto mockWeatherSearchDto) {
+    public Map<String, String> getWeatherPhrase(@RequestBody MockWeatherSearchDto mockWeatherSearchDto) {
         log.info(mockWeatherSearchDto.toString());
-        return new MockWelcomPhraseDto(1, "오늘은 하루종일 화창한 하루!\n좋은 하루 되세요:)");
+        Map<String, String> map = new HashMap<>();
+        map.put("phrase", "오늘도 좋은하루 :)");
+        return map;
     }
 
-    @PostMapping("/weather/dayList")
+    @PostMapping("/weather/oneday")
     public List<MockWeatherDto> getWeatherDayList(@RequestBody MockWeatherSearchDto mockWeatherSearchDto) {
         log.info(mockWeatherSearchDto.toString());
         return WeatherDataGenerator.getDayWeatherList();
