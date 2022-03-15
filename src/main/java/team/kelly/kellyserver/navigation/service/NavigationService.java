@@ -142,6 +142,9 @@ public class NavigationService {
     public JSONObject getBusStationDetail(String odsayBusStationID) throws IOException {
 
         String jsonStr = ApiUtility.callApi(busStationDetailApi + odsayApiKey + "&lang=0&output=xml&stationID=" + odsayBusStationID, "xml");
+
+        globalValue.increaseOdsayCallCount();
+
         JSONObject jsonObject = new JSONObject(jsonStr);
         jsonObject = jsonObject.getJSONObject("message").getJSONObject("result");
 
